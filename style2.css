@@ -1,0 +1,20 @@
+
+.navbar {
+    background-color: #DE3843 !important;
+}
+
+.navbar-brand {
+    color: #ffffff !important;
+}
+
+/* Offcanvas side drawer header */
+.offcanvas-header {
+    background-color: #DE3843 !important;
+    color: #ffffff !important;
+}
+
+/* White close icon and mobile menu icon */
+.offcanvas-header .btn-close,
+.navbar-toggler-icon {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
