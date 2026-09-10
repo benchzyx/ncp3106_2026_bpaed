@@ -1,0 +1,10 @@
+/* Custom styles */
+.carousel-item {
+    min-height: 280px;
+    background-color: #6c757d; /* Fallback gray background */
+}
+
+.carousel-item img {
+    object-fit: cover;
+    min-height: 280px;
+}
