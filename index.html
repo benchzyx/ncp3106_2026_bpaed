@@ -1,76 +1,832 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>CPE COMMUNITY</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPE Web Portal - Executive Officers</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <!-- Custom CSS for Glowing Computer Logo (03045e, 023e8a, 0077b6 theme) -->
     <style>
-        .carousel-item {
-            min-height: 280px;
-            background-color: #777; 
+      .m2-container {
+        position: relative;
+        width: 44px;
+        height: 44px;
+        border-radius: 8px;
+        background: linear-gradient(135deg, #03045e 10%, #023e8a 60%, #0077b6 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        user-select: none;
+        animation: gradient-shift 5s ease-in-out infinite;
+        background-size: 200% 200%;
+        flex-shrink: 0;
+      }
+
+      .m2-container .logo {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.85rem;
+        color: white;
+        background-image: linear-gradient(to right, #90e0ef, #ffffff);
+        -webkit-text-fill-color: transparent;
+        -webkit-background-clip: text;
+        font-weight: bold;
+      }
+
+      .m2-container .logo svg {
+        width: 20px;
+        height: 20px;
+        margin-right: 2px;
+        fill: #90e0ef;
+      }
+
+      .m2-container::before,
+      .m2-container::after {
+        --glow-size: 3px;
+        content: "";
+        position: absolute;
+        top: calc(var(--glow-size) / -2);
+        left: calc(var(--glow-size) / -2);
+        width: calc(100% + var(--glow-size));
+        height: calc(100% + var(--glow-size));
+        border-radius: 10px;
+        background: radial-gradient(circle at 0 0, #03045e, transparent),
+                    radial-gradient(circle at 100% 0, #023e8a, transparent),
+                    radial-gradient(circle at 0 100%, #0077b6, transparent),
+                    radial-gradient(circle at 100% 100%, #00b4d8, transparent);
+      }
+
+      .m2-container::after {
+        --glow-size: 2px;
+        z-index: 1;
+      }
+
+      .m2-container::before {
+        --glow-size: 6px;
+        z-index: 0;
+        filter: blur(8px);
+        animation: blur-animation 3s ease-in-out alternate infinite;
+      }
+
+      .m2-container .logo {
+        position: relative;
+        z-index: 2;
+      }
+
+      @keyframes blur-animation {
+        to {
+          filter: blur(12px);
+          transform: scale(1.05);
         }
+      }
+
+      @keyframes gradient-shift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
     </style>
 </head>
-<body>
+<body class="bg-gray-950 text-gray-100 min-h-screen flex flex-col justify-between">
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-            <!-- Updated Brand Section with Logo and Text -->
-            <a href="#" class="navbar-brand d-flex align-items-center gap-2">
-                <img src="assets/logo.png" height="28" alt="CPELogo">
-                <span class="fw-bold fs-6 text-dark">Computer Engineering</span>
-            </a>
-            
-            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            
-            <div class="collapse navbar-collapse" id="navbarCollapse">
-                <div class="navbar-nav">
-                    <a href="#" class="nav-item nav-link active">Home</a>
-                    <a href="#" class="nav-item nav-link">About</a>
-                    <a href="#" class="nav-item nav-link">Discussions</a>
-                    <a href="#" class="nav-item nav-link disabled" tabindex="-1">More</a>
+    <!-- Top Navigation Header with Glowing Computer Logo -->
+    <header class="bg-gray-900 border-b border-gray-800 sticky top-0 z-50">
+        <div class="container-lg py-3 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="m2-container">
+                    <div class="logo">
+                        <!-- Desktop Computer SVG Icon -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M20 3H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h6l-2 3v1h8v-1l-2-3h6c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 12H4V5h16v10z"/>
+                        </svg>
+                        <span>SCPES</span>
+                    </div>
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-bold text-lg text-white leading-tight">CPE WEB PORTAL</span>
+                    <span class="text-blue-400 text-[10px] uppercase tracking-wider font-semibold">Society of Computer Engineering</span>
+                </div>
+            </div>
+
+            <nav class="hidden md:flex gap-6 text-sm font-medium text-gray-300">
+                <a href="#" class="hover:text-blue-400 transition-colors">Home</a>
+                <a href="#officers" class="hover:text-blue-400 transition-colors">Curriculum</a>
+                <a href="#" class="hover:text-blue-400 transition-colors">Officers & Faculty</a>
+                <a href="#" class="hover:text-blue-400 transition-colors">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container-lg my-4">
+
+        <div class="carousel-container position-relative">
+
+            <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5000">
+
+               
+
+                <!-- Controls & Indicators Header Bar -->
+
+                <div class="position-absolute top-0 end-0 m-3 z-3 d-none d-md-flex gap-2">
+
+                    <button type="button" class="btn btn-sm btn-dark bg-opacity-50 text-white rounded-pill px-3 border-0 backdrop-blur" id="pauseCarouselBtn">
+
+                        <i class="bi bi-pause-fill" id="pauseIcon"></i> Pause
+
+                    </button>
+
+                </div>
+
+
+
+                <!-- Carousel Indicators -->
+
+                <div class="carousel-indicators z-3">
+
+                    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+
+                    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+
+                    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+
+                </div>
+
+               
+
+                <!-- Slide Wrapper -->
+
+                <div class="carousel-inner">
+
+                    <!-- Slide 1 -->
+
+                    <div class="carousel-item active">
+
+                        <img src="C1.png" alt="Hardware & Microcontrollers">
+
+                        <div class="carousel-overlay"></div>
+
+                        <div class="carousel-caption-custom">
+
+                            <span class="badge bg-primary badge-pill mb-2">Hardware Innovation</span>
+
+                            <h2 class="fw-bold fs-3 mb-2">Embedded Systems & Robotics</h2>
+
+                            <p class="text-light text-opacity-90 mb-3">Architecting next-generation IoT solutions, microprocessors, and custom circuit design tailored for automated high-performance tasks.</p>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- Slide 2 -->
+
+                    <div class="carousel-item">
+
+                        <img src="workshop.png" alt="Data Science & Servers">
+
+                        <div class="carousel-overlay"></div>
+
+                        <div class="carousel-caption-custom">
+
+                            <span class="badge bg-info text-dark badge-pill mb-2">Career Talks</span>
+
+                            <h2 class="fw-bold fs-3 mb-2">Colloquium and Workshops</h2>
+
+                            <p class="text-light text-opacity-90 mb-3">At University of the East–Manila, we have colloquiums, career talks, and workshops that help students gain knowledge, skills, and career insights.</p>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- Slide 3 -->
+
+                    <div class="carousel-item">
+
+                        <img src="extra.png" alt="Cybersecurity & Code">
+
+                        <div class="carousel-overlay"></div>
+
+                        <div class="carousel-caption-custom">
+
+                            <span class="badge bg-warning text-dark badge-pill mb-2">Extracurricular</span>
+
+                            <h2 class="fw-bold fs-3 mb-2">Events & Extracurricular</h2>
+
+                            <p class="text-light text-opacity-90 mb-3">We also have extracurricular activities and events like Freshmen Huddle, Tech Clash, video game tournaments, and other student activities that promote teamwork and enjoyment.</p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Custom Navigation Controls -->
+
+                <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+
+                    <span class="visually-hidden">Previous</span>
+
+                </button>
+
+                <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+
+                    <span class="visually-hidden">Next</span>
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Metrics Section (4 Custom Uiverse Dark Cards with Consistent Alignment) -->
+
+    <section class="container-lg my-5" id="features">
+
+        <div class="text-center mb-5">
+
+            <span class="text-primary fw-semibold text-uppercase small tracking-wide">Core Disciplines</span>
+
+            <h2 class="fw-bold text-dark mb-2">Computer Engineering Core Focus Areas</h2>
+
+            <p class="text-muted small">Explore the primary modules within our CPE curriculum.</p>
+
+        </div>
+
+
+
+        <div class="row g-4 justify-content-center">
+
+
+
+            <!-- Card 1: HARDWARE -->
+
+            <div class="col-xl-3 col-lg-6 col-md-6 d-flex justify-content-center">
+
+                <div class="group cursor-pointer transform transition-all duration-500 hover:scale-105 hover:-rotate-1 w-full max-w-[320px]">
+
+                    <div class="text-white rounded-3xl border border-white/10 bg-gradient-to-br from-[#010101] via-[#090909] to-[#010101] shadow-2xl duration-700 z-10 relative backdrop-blur-xl hover:border-white/25 overflow-hidden hover:shadow-white/5 hover:shadow-3xl h-full flex flex-col justify-between">
+
+                        <div class="absolute inset-0 z-0 overflow-hidden">
+
+                            <div class="absolute inset-0 bg-gradient-to-tr from-white/5 to-white/10 opacity-40 group-hover:opacity-60 transition-opacity duration-500"></div>
+
+                            <div style="animation-delay: 0.5s;" class="absolute -bottom-20 -left-20 w-48 h-48 rounded-full bg-gradient-to-tr from-white/10 to-transparent blur-3xl opacity-30 group-hover:opacity-50 transform group-hover:scale-110 transition-all duration-700 animate-bounce"></div>
+
+                            <div class="absolute top-10 left-10 w-16 h-16 rounded-full bg-white/5 blur-xl animate-ping"></div>
+
+                            <div style="animation-delay: 1s;" class="absolute bottom-16 right-16 w-12 h-12 rounded-full bg-white/5 blur-lg animate-ping"></div>
+
+                            <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent transform -skew-x-12 translate-x-full group-hover:translate-x-[-200%] transition-transform duration-1000"></div>
+
+                        </div>
+
+                        <div class="p-8 relative z-10 flex flex-col items-center text-left h-full">
+
+                            <div class="relative mb-6">
+
+                                <div class="absolute inset-0 rounded-full border-2 border-white/20 animate-ping"></div>
+
+                                <div style="animation-delay: 0.5s;" class="absolute inset-0 rounded-full border border-white/10 animate-pulse"></div>
+
+                                <div class="p-5 rounded-full backdrop-blur-lg border border-white/20 bg-gradient-to-br from-black/80 to-black/60 shadow-2xl transform group-hover:rotate-12 group-hover:scale-110 transition-all duration-500 hover:shadow-white/20">
+
+                                    <div class="transform group-hover:rotate-180 transition-transform duration-700">
+
+                                        <i class="bi bi-cpu fs-3 text-white"></i>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="w-full mb-3">
+
+                                <h3 class="text-xl font-bold bg-gradient-to-r from-white via-gray-100 to-white bg-clip-text text-transparent text-left">Hardware</h3>
+
+                            </div>
+
+                            <div class="w-full space-y-2 text-left flex-grow">
+
+                                <p class="text-blue-400 text-xs font-semibold uppercase tracking-wider">Microprocessors & Arduino</p>
+
+                                <p class="text-gray-300 text-sm leading-relaxed">
+
+                                    Hands-on experience with electronics design, embedded systems programming, and custom circuit board architectures.
+
+                                </p>
+
+                            </div>
+
+                            <div class="mt-6 w-full h-0.5 bg-gradient-to-r from-white/20 via-white/50 to-transparent rounded-full transform group-hover:h-1 transition-all duration-500"></div>
+
+                            <div class="flex space-x-2 mt-4 opacity-60 group-hover:opacity-100 transition-opacity duration-300 self-center">
+
+                                <div class="w-2 h-2 bg-white rounded-full animate-bounce"></div>
+
+                                <div style="animation-delay: 0.1s;" class="w-2 h-2 bg-white rounded-full animate-bounce"></div>
+
+                                <div style="animation-delay: 0.2s;" class="w-2 h-2 bg-white rounded-full animate-bounce"></div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Card 2: PROGRAMMING -->
+
+            <div class="col-xl-3 col-lg-6 col-md-6 d-flex justify-content-center">
+
+                <div class="group cursor-pointer transform transition-all duration-500 hover:scale-105 hover:-rotate-1 w-full max-w-[320px]">
+
+                    <div class="text-white rounded-3xl border border-white/10 bg-gradient-to-br from-[#010101] via-[#090909] to-[#010101] shadow-2xl duration-700 z-10 relative backdrop-blur-xl hover:border-white/25 overflow-hidden hover:shadow-white/5 hover:shadow-3xl h-full flex flex-col justify-between">
+
+                        <div class="absolute inset-0 z-0 overflow-hidden">
+
+                            <div class="absolute inset-0 bg-gradient-to-tr from-white/5 to-white/10 opacity-40 group-hover:opacity-60 transition-opacity duration-500"></div>
+
+                            <div style="animation-delay: 0.5s;" class="absolute -bottom-20 -left-20 w-48 h-48 rounded-full bg-gradient-to-tr from-white/10 to-transparent blur-3xl opacity-30 group-hover:opacity-50 transform group-hover:scale-110 transition-all duration-700 animate-bounce"></div>
+
+                            <div class="absolute top-10 left-10 w-16 h-16 rounded-full bg-white/5 blur-xl animate-ping"></div>
+
+                            <div style="animation-delay: 1s;" class="absolute bottom-16 right-16 w-12 h-12 rounded-full bg-white/5 blur-lg animate-ping"></div>
+
+                            <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent transform -skew-x-12 translate-x-full group-hover:translate-x-[-200%] transition-transform duration-1000"></div>
+
+                        </div>
+
+                        <div class="p-8 relative z-10 flex flex-col items-center text-left h-full">
+
+                            <div class="relative mb-6">
+
+                                <div class="absolute inset-0 rounded-full border-2 border-white/20 animate-ping"></div>
+
+                                <div style="animation-delay: 0.5s;" class="absolute inset-0 rounded-full border border-white/10 animate-pulse"></div>
+
+                                <div class="p-5 rounded-full backdrop-blur-lg border border-white/20 bg-gradient-to-br from-black/80 to-black/60 shadow-2xl transform group-hover:rotate-12 group-hover:scale-110 transition-all duration-500 hover:shadow-white/20">
+
+                                    <div class="transform group-hover:rotate-180 transition-transform duration-700">
+
+                                        <i class="bi bi-code-slash fs-3 text-white"></i>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="w-full mb-3">
+
+                                <h3 class="text-xl font-bold bg-gradient-to-r from-white via-gray-100 to-white bg-clip-text text-transparent text-left">Programming</h3>
+
+                            </div>
+
+                            <div class="w-full space-y-2 text-left flex-grow">
+
+                                <p class="text-blue-400 text-xs font-semibold uppercase tracking-wider">Software Design & Logic</p>
+
+                                <p class="text-gray-300 text-sm leading-relaxed">
+
+                                    Master C++, Python, and Java to engineer robust, high-performance software and automated algorithm pipelines.
+
+                                </p>
+
+                            </div>
+
+                            <div class="mt-6 w-full h-0.5 bg-gradient-to-r from-white/20 via-white/50 to-transparent rounded-full transform group-hover:h-1 transition-all duration-500"></div>
+
+                            <div class="flex space-x-2 mt-4 opacity-60 group-hover:opacity-100 transition-opacity duration-300 self-center">
+
+                                <div class="w-2 h-2 bg-white rounded-full animate-bounce"></div>
+
+                                <div style="animation-delay: 0.1s;" class="w-2 h-2 bg-white rounded-full animate-bounce"></div>
+
+                                <div style="animation-delay: 0.2s;" class="w-2 h-2 bg-white rounded-full animate-bounce"></div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Card 3: NETWORKS -->
+
+            <div class="col-xl-3 col-lg-6 col-md-6 d-flex justify-content-center">
+
+                <div class="group cursor-pointer transform transition-all duration-500 hover:scale-105 hover:-rotate-1 w-full max-w-[320px]">
+
+                    <div class="text-white rounded-3xl border border-white/10 bg-gradient-to-br from-[#010101] via-[#090909] to-[#010101] shadow-2xl duration-700 z-10 relative backdrop-blur-xl hover:border-white/25 overflow-hidden hover:shadow-white/5 hover:shadow-3xl h-full flex flex-col justify-between">
+
+                        <div class="absolute inset-0 z-0 overflow-hidden">
+
+                            <div class="absolute inset-0 bg-gradient-to-tr from-white/5 to-white/10 opacity-40 group-hover:opacity-60 transition-opacity duration-500"></div>
+
+                            <div style="animation-delay: 0.5s;" class="absolute -bottom-20 -left-20 w-48 h-48 rounded-full bg-gradient-to-tr from-white/10 to-transparent blur-3xl opacity-30 group-hover:opacity-50 transform group-hover:scale-110 transition-all duration-700 animate-bounce"></div>
+
+                            <div class="absolute top-10 left-10 w-16 h-16 rounded-full bg-white/5 blur-xl animate-ping"></div>
+
+                            <div style="animation-delay: 1s;" class="absolute bottom-16 right-16 w-12 h-12 rounded-full bg-white/5 blur-lg animate-ping"></div>
+
+                            <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent transform -skew-x-12 translate-x-full group-hover:translate-x-[-200%] transition-transform duration-1000"></div>
+
+                        </div>
+
+                        <div class="p-8 relative z-10 flex flex-col items-center text-left h-full">
+
+                            <div class="relative mb-6">
+
+                                <div class="absolute inset-0 rounded-full border-2 border-white/20 animate-ping"></div>
+
+                                <div style="animation-delay: 0.5s;" class="absolute inset-0 rounded-full border border-white/10 animate-pulse"></div>
+
+                                <div class="p-5 rounded-full backdrop-blur-lg border border-white/20 bg-gradient-to-br from-black/80 to-black/60 shadow-2xl transform group-hover:rotate-12 group-hover:scale-110 transition-all duration-500 hover:shadow-white/20">
+
+                                    <div class="transform group-hover:rotate-180 transition-transform duration-700">
+
+                                        <i class="bi bi-diagram-3 fs-3 text-white"></i>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="w-full mb-3">
+
+                                <h3 class="text-xl font-bold bg-gradient-to-r from-white via-gray-100 to-white bg-clip-text text-transparent text-left">Networks</h3>
+
+                            </div>
+
+                            <div class="w-full space-y-2 text-left flex-grow">
+
+                                <p class="text-blue-400 text-xs font-semibold uppercase tracking-wider">Cisco Networking & Security</p>
+
+                                <p class="text-gray-300 text-sm leading-relaxed">
+
+                                    Design network configurations, manage routing protocols, and enforce enterprise cyber defense systems.
+
+                                </p>
+
+                            </div>
+
+                            <div class="mt-6 w-full h-0.5 bg-gradient-to-r from-white/20 via-white/50 to-transparent rounded-full transform group-hover:h-1 transition-all duration-500"></div>
+
+                            <div class="flex space-x-2 mt-4 opacity-60 group-hover:opacity-100 transition-opacity duration-300 self-center">
+
+                                <div class="w-2 h-2 bg-white rounded-full animate-bounce"></div>
+
+                                <div style="animation-delay: 0.1s;" class="w-2 h-2 bg-white rounded-full animate-bounce"></div>
+
+                                <div style="animation-delay: 0.2s;" class="w-2 h-2 bg-white rounded-full animate-bounce"></div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Card 4: EMBEDDED SYSTEMS -->
+
+            <div class="col-xl-3 col-lg-6 col-md-6 d-flex justify-content-center">
+
+                <div class="group cursor-pointer transform transition-all duration-500 hover:scale-105 hover:-rotate-1 w-full max-w-[320px]">
+
+                    <div class="text-white rounded-3xl border border-white/10 bg-gradient-to-br from-[#010101] via-[#090909] to-[#010101] shadow-2xl duration-700 z-10 relative backdrop-blur-xl hover:border-white/25 overflow-hidden hover:shadow-white/5 hover:shadow-3xl h-full flex flex-col justify-between">
+
+                        <div class="absolute inset-0 z-0 overflow-hidden">
+
+                            <div class="absolute inset-0 bg-gradient-to-tr from-white/5 to-white/10 opacity-40 group-hover:opacity-60 transition-opacity duration-500"></div>
+
+                            <div style="animation-delay: 0.5s;" class="absolute -bottom-20 -left-20 w-48 h-48 rounded-full bg-gradient-to-tr from-white/10 to-transparent blur-3xl opacity-30 group-hover:opacity-50 transform group-hover:scale-110 transition-all duration-700 animate-bounce"></div>
+
+                            <div class="absolute top-10 left-10 w-16 h-16 rounded-full bg-white/5 blur-xl animate-ping"></div>
+
+                            <div style="animation-delay: 1s;" class="absolute bottom-16 right-16 w-12 h-12 rounded-full bg-white/5 blur-lg animate-ping"></div>
+
+                            <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent transform -skew-x-12 translate-x-full group-hover:translate-x-[-200%] transition-transform duration-1000"></div>
+
+                        </div>
+
+                        <div class="p-8 relative z-10 flex flex-col items-center text-left h-full">
+
+                            <div class="relative mb-6">
+
+                                <div class="absolute inset-0 rounded-full border-2 border-white/20 animate-ping"></div>
+
+                                <div style="animation-delay: 0.5s;" class="absolute inset-0 rounded-full border border-white/10 animate-pulse"></div>
+
+                                <div class="p-5 rounded-full backdrop-blur-lg border border-white/20 bg-gradient-to-br from-black/80 to-black/60 shadow-2xl transform group-hover:rotate-12 group-hover:scale-110 transition-all duration-500 hover:shadow-white/20">
+
+                                    <div class="transform group-hover:rotate-180 transition-transform duration-700">
+
+                                        <i class="bi bi-memory fs-3 text-white"></i>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="w-full mb-3">
+
+                                <h3 class="text-xl font-bold bg-gradient-to-r from-white via-gray-100 to-white bg-clip-text text-transparent text-left">Embedded</h3>
+
+                            </div>
+
+                            <div class="w-full space-y-2 text-left flex-grow">
+
+                                <p class="text-blue-400 text-xs font-semibold uppercase tracking-wider">Real-Time Control Systems</p>
+
+                                <p class="text-gray-300 text-sm leading-relaxed">
+
+                                    Integrate firmware with hardware, managing interrupts, RTOS kernels, and ultra-low latency compute units.
+
+                                </p>
+
+                            </div>
+
+                            <div class="mt-6 w-full h-0.5 bg-gradient-to-r from-white/20 via-white/50 to-transparent rounded-full transform group-hover:h-1 transition-all duration-500"></div>
+
+                            <div class="flex space-x-2 mt-4 opacity-60 group-hover:opacity-100 transition-opacity duration-300 self-center">
+
+                                <div class="w-2 h-2 bg-white rounded-full animate-bounce"></div>
+
+                                <div style="animation-delay: 0.1s;" class="w-2 h-2 bg-white rounded-full animate-bounce"></div>
+
+                                <div style="animation-delay: 0.2s;" class="w-2 h-2 bg-white rounded-full animate-bounce"></div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- Executive Officers Section -->
+    <section id="officers" class="py-10 container-lg">
+        <div class="text-center mb-8">
+            <h2 class="text-2xl md:text-3xl font-extrabold text-white tracking-tight">Executive Officers</h2>
+            <p class="text-sm text-gray-400 mt-1">Leading the Computer Engineering Student Body</p>
+        </div>
+
+        <div class="flex flex-wrap gap-4 justify-center items-center">
+
+            <!-- Card 1: President -->
+            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
+                <img src="president.jpg" alt="President" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=President'" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
+                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5">Executive Head</span>
+                    <h3 class="text-xs font-bold text-white leading-tight drop-shadow">President</h3>
+                </div>
+            </div>
+
+            <!-- Card 2: VP Business -->
+            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
+                <img src="vpbusiness.jpg" alt="VP For Business and Finance" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
+                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5">Vice President</span>
+                    <h3 class="text-xs font-bold text-white leading-tight drop-shadow">VP Business & Finance</h3>
+                </div>
+            </div>
+
+            <!-- Card 3: VP Career -->
+            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
+                <img src="vpcareer.jpg" alt="VP For Career Development" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
+                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5">Vice President</span>
+                    <h3 class="text-xs font-bold text-white leading-tight drop-shadow">VP Career Development</h3>
+                </div>
+            </div>
+
+            <!-- Card 4: VP Community -->
+            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
+                <img src="vpcommunity.jpg" alt="VP For Community and Social Responsibility" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
+                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5">Vice President</span>
+                    <h3 class="text-xs font-bold text-white leading-tight drop-shadow">VP Community & Social Responsibility</h3>
+                </div>
+            </div>
+
+            <!-- Card 5: VP Creatives -->
+            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
+                <img src="vpcreatives.jpg" alt="VP For Creatives and Communication" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
+                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5">Vice President</span>
+                    <h3 class="text-xs font-bold text-white leading-tight drop-shadow">VP Creatives & Communication</h3>
+                </div>
+            </div>
+
+            <!-- Card 6: VP Events -->
+            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
+                <img src="vpevents.jpg" alt="VP For Events and Programs" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
+                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5">Vice President</span>
+                    <h3 class="text-xs font-bold text-white leading-tight drop-shadow">VP Events & Programs</h3>
+                </div>
+            </div>
+
+            <!-- Card 7: VP External -->
+            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
+                <img src="vpexternal.jpg" alt="VP For External Affairs" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
+                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5">Vice President</span>
+                    <h3 class="text-xs font-bold text-white leading-tight drop-shadow">VP External Affairs</h3>
+                </div>
+            </div>
+
+            <!-- Card 8: VP Internal -->
+            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
+                <img src="vpinternal.jpg" alt="VP For Internal Affairs" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
+                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5">Vice President</span>
+                    <h3 class="text-xs font-bold text-white leading-tight drop-shadow">VP Internal Affairs</h3>
+                </div>
+            </div>
+
+            <!-- Card 9: VP Logistics -->
+            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
+                <img src="vplogistics.jpg" alt="VP For Logistics and Volunteer's Coordination" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
+                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5">Vice President</span>
+                    <h3 class="text-xs font-bold text-white leading-tight drop-shadow">VP Logistics & Volunteers</h3>
+                </div>
+            </div>
+
+            <!-- Card 10: VP Media -->
+            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
+                <img src="vpmedia.jpg" alt="VP For Media" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
+                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5">Vice President</span>
+                    <h3 class="text-xs font-bold text-white leading-tight drop-shadow">VP Media</h3>
+                </div>
+            </div>
+
+            <!-- Card 11: VP Recreation -->
+            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
+                <img src="vprnw.jpg" alt="VP For Recreation and Wellness" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
+                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5">Vice President</span>
+                    <h3 class="text-xs font-bold text-white leading-tight drop-shadow">VP Recreation & Wellness</h3>
+                </div>
+            </div>
+
+            <!-- Card 12: VP Secretariat -->
+            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
+                <img src="vpsec.jpg" alt="VP For Secretariat" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
+                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5">Vice President</span>
+                    <h3 class="text-xs font-bold text-white leading-tight drop-shadow">VP Secretariat</h3>
+                </div>
+            </div>
+
+            <!-- Card 13: VP Tech -->
+            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
+                <img src="vptech.jpg" alt="VP For Technical Operations" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
+                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5">Vice President</span>
+                    <h3 class="text-xs font-bold text-white leading-tight drop-shadow">VP Technical Operations</h3>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light pt-5 pb-4 mt-5">
+        <div class="container-lg">
+            <div class="row g-4 mb-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <span class="badge bg-primary fs-6">CPE</span>
+                        <span class="fw-bold fs-5 text-white">WEB PORTAL</span>
+                    </div>
+                    <p class="text-secondary small mb-3">Center for Computer Engineering Research and System Development. Driving innovation through hardware & software integration.</p>
+                </div>
+
+                <div class="col-lg-2 col-md-6">
+                    <h6 class="fw-bold text-white mb-3">Quick Links</h6>
+                    <ul class="list-unstyled text-secondary small d-grid gap-2">
+                        <li><a href="#" class="text-decoration-none text-secondary">Architecture</a></li>
+                        <li><a href="#" class="text-decoration-none text-secondary">Lab Reports</a></li>
+                        <li><a href="#" class="text-decoration-none text-secondary">Documentation</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-2 col-md-6">
+                    <h6 class="fw-bold text-white mb-3">Resources</h6>
+                    <ul class="list-unstyled text-secondary small d-grid gap-2">
+                        <li><a href="#" class="text-decoration-none text-secondary">API Reference</a></li>
+                        <li><a href="#" class="text-decoration-none text-secondary">Hardware SDK</a></li>
+                        <li><a href="#" class="text-decoration-none text-secondary">Community Forum</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <h6 class="fw-bold text-white mb-3">Subscribe to Technical Updates</h6>
+                    <p class="text-secondary small">Receive weekly digests on system updates and lab releases.</p>
+                    <div class="input-group mb-3">
+                        <input type="email" class="form-control bg-secondary bg-opacity-10 border-secondary text-white" placeholder="Enter your email" aria-label="Subscriber Email">
+                        <button class="btn btn-primary" type="button">Subscribe</button>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="border-secondary my-4">
+
+            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center text-secondary small">
+                <p class="mb-2 mb-sm-0">&copy; 2026 CPE Web Portal. All rights reserved.</p>
+                <div class="d-flex gap-3">
+                    <a href="#" class="text-decoration-none text-secondary">Privacy Policy</a>
+                    <a href="#" class="text-decoration-none text-secondary">Terms of Service</a>
                 </div>
             </div>
         </div>
-    </nav>
+    </footer>
 
-    <div class="container-lg my-3">
-        <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-            <div class="carousel-indicators">
-                <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
-            </div>
+    <!-- Custom Interactivity Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const heroCarouselEl = document.getElementById('heroCarousel');
+            if (heroCarouselEl) {
+                const carouselInstance = new bootstrap.Carousel(heroCarouselEl, {
+                    interval: 5000,
+                    pause: 'hover',
+                    wrap: true
+                });
 
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <img src="/examples/images/slide1.png" class="d-block w-100" alt="Slide 1">
-                </div>
-                <div class="carousel-item">
-                    <img src="/examples/images/slide2.png" class="d-block w-100" alt="Slide 2">
-                </div>
-                <div class="carousel-item">
-                    <img src="/examples/images/slide3.png" class="d-block w-100" alt="Slide 3">
-                </div>
-            </div>
+                const pauseBtn = document.getElementById('pauseCarouselBtn');
+                const pauseIcon = document.getElementById('pauseIcon');
+                let isPlaying = true;
 
-            <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+                if (pauseBtn && pauseIcon) {
+                    pauseBtn.addEventListener('click', function() {
+                        if (isPlaying) {
+                            carouselInstance.pause();
+                            pauseIcon.className = 'bi bi-play-fill';
+                            pauseBtn.childNodes[1].nodeValue = ' Resume';
+                        } else {
+                            carouselInstance.cycle();
+                            pauseIcon.className = 'bi bi-pause-fill';
+                            pauseBtn.childNodes[1].nodeValue = ' Pause';
+                        }
+                        isPlaying = !isPlaying;
+                    });
+                }
+            }
+        });
+    </script>
 </body>
 </html>
