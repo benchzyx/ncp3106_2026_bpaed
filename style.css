@@ -1,10 +1,83 @@
-
-.carousel-item {
-    min-height: 280px;
-    background-color: #6c757d; 
+.m2-container {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #03045e 10%, #023e8a 60%, #0077b6 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  animation: gradient-shift 5s ease-in-out infinite;
+  background-size: 200% 200%;
+  flex-shrink: 0;
+  /* Creates a isolated stacking context so z-index works properly */
+  isolation: isolate;
 }
 
-.carousel-item img {
-    object-fit: cover;
-    min-height: 280px;
+.m2-container .logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  color: white;
+  background-image: linear-gradient(to right, #90e0ef, #ffffff);
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+  font-weight: bold;
+  position: relative;
+  z-index: 2;
+}
+
+.m2-container .logo svg {
+  width: 20px;
+  height: 20px;
+  margin-right: 2px;
+  fill: #90e0ef;
+}
+
+/* Base style for both pseudo-elements */
+.m2-container::before,
+.m2-container::after {
+  content: "";
+  position: absolute;
+  border-radius: 10px;
+  background: radial-gradient(circle at 0 0, #03045e, transparent),
+              radial-gradient(circle at 100% 0, #023e8a, transparent),
+              radial-gradient(circle at 0 100%, #0077b6, transparent),
+              radial-gradient(circle at 100% 100%, #00b4d8, transparent);
+  pointer-events: none;
+}
+
+/* Inner Accent Ring */
+.m2-container::after {
+  top: -1px;
+  left: -1px;
+  width: calc(100% + 2px);
+  height: calc(100% + 2px);
+  z-index: -1;
+}
+
+/* Outer Glowing Blur Effect */
+.m2-container::before {
+  top: -4px;
+  left: -4px;
+  width: calc(100% + 8px);
+  height: calc(100% + 8px);
+  z-index: -2;
+  filter: blur(8px);
+  animation: blur-animation 3s ease-in-out alternate infinite;
+}
+
+@keyframes blur-animation {
+  to {
+    filter: blur(12px);
+    transform: scale(1.08);
+  }
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }

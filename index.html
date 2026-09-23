@@ -4,107 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CPE Web Portal - Executive Officers</title>
-    
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    
-    <!-- Tailwind CSS CDN -->
+
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-    <!-- Custom CSS for Glowing Computer Logo (03045e, 023e8a, 0077b6 theme) -->
-    <style>
-      .m2-container {
-        position: relative;
-        width: 44px;
-        height: 44px;
-        border-radius: 8px;
-        background: linear-gradient(135deg, #03045e 10%, #023e8a 60%, #0077b6 100%);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        user-select: none;
-        animation: gradient-shift 5s ease-in-out infinite;
-        background-size: 200% 200%;
-        flex-shrink: 0;
-      }
 
-      .m2-container .logo {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.85rem;
-        color: white;
-        background-image: linear-gradient(to right, #90e0ef, #ffffff);
-        -webkit-text-fill-color: transparent;
-        -webkit-background-clip: text;
-        font-weight: bold;
-      }
-
-      .m2-container .logo svg {
-        width: 20px;
-        height: 20px;
-        margin-right: 2px;
-        fill: #90e0ef;
-      }
-
-      .m2-container::before,
-      .m2-container::after {
-        --glow-size: 3px;
-        content: "";
-        position: absolute;
-        top: calc(var(--glow-size) / -2);
-        left: calc(var(--glow-size) / -2);
-        width: calc(100% + var(--glow-size));
-        height: calc(100% + var(--glow-size));
-        border-radius: 10px;
-        background: radial-gradient(circle at 0 0, #03045e, transparent),
-                    radial-gradient(circle at 100% 0, #023e8a, transparent),
-                    radial-gradient(circle at 0 100%, #0077b6, transparent),
-                    radial-gradient(circle at 100% 100%, #00b4d8, transparent);
-      }
-
-      .m2-container::after {
-        --glow-size: 2px;
-        z-index: 1;
-      }
-
-      .m2-container::before {
-        --glow-size: 6px;
-        z-index: 0;
-        filter: blur(8px);
-        animation: blur-animation 3s ease-in-out alternate infinite;
-      }
-
-      .m2-container .logo {
-        position: relative;
-        z-index: 2;
-      }
-
-      @keyframes blur-animation {
-        to {
-          filter: blur(12px);
-          transform: scale(1.05);
-        }
-      }
-
-      @keyframes gradient-shift {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-      }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body class="bg-gray-950 text-gray-100 min-h-screen flex flex-col justify-between">
 
-    <!-- Top Navigation Header with Glowing Computer Logo -->
     <header class="bg-gray-900 border-b border-gray-800 sticky top-0 z-50">
         <div class="container-lg py-3 flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <div class="m2-container">
                     <div class="logo">
-                        <!-- Desktop Computer SVG Icon -->
+                
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                             <path d="M20 3H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h6l-2 3v1h8v-1l-2-3h6c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 12H4V5h16v10z"/>
                         </svg>
@@ -609,10 +525,7 @@
         </div>
 
     </section>
-
-
-
-    <!-- Executive Officers Section -->
+    <!-- Officer cards -->
     <section id="officers" class="py-10 container-lg">
         <div class="text-center mb-8">
             <h2 class="text-2xl md:text-3xl font-extrabold text-white tracking-tight">Executive Officers</h2>
@@ -621,7 +534,6 @@
 
         <div class="flex flex-wrap gap-4 justify-center items-center">
 
-            <!-- Card 1: President -->
             <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
                 <img src="president.jpg" alt="President" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=President'" />
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
@@ -630,61 +542,6 @@
                 </div>
             </div>
 
-            <!-- Card 2: VP Business -->
-            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
-                <img src="vpbusiness.jpg" alt="VP For Business and Finance" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
-                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
-                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5">Vice President</span>
-                    <h3 class="text-xs font-bold text-white leading-tight drop-shadow">VP Business & Finance</h3>
-                </div>
-            </div>
-
-            <!-- Card 3: VP Career -->
-            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
-                <img src="vpcareer.jpg" alt="VP For Career Development" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
-                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
-                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5">Vice President</span>
-                    <h3 class="text-xs font-bold text-white leading-tight drop-shadow">VP Career Development</h3>
-                </div>
-            </div>
-
-            <!-- Card 4: VP Community -->
-            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
-                <img src="vpcommunity.jpg" alt="VP For Community and Social Responsibility" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
-                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
-                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5">Vice President</span>
-                    <h3 class="text-xs font-bold text-white leading-tight drop-shadow">VP Community & Social Responsibility</h3>
-                </div>
-            </div>
-
-            <!-- Card 5: VP Creatives -->
-            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
-                <img src="vpcreatives.jpg" alt="VP For Creatives and Communication" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
-                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
-                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5">Vice President</span>
-                    <h3 class="text-xs font-bold text-white leading-tight drop-shadow">VP Creatives & Communication</h3>
-                </div>
-            </div>
-
-            <!-- Card 6: VP Events -->
-            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
-                <img src="vpevents.jpg" alt="VP For Events and Programs" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
-                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
-                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5">Vice President</span>
-                    <h3 class="text-xs font-bold text-white leading-tight drop-shadow">VP Events & Programs</h3>
-                </div>
-            </div>
-
-            <!-- Card 7: VP External -->
-            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
-                <img src="vpexternal.jpg" alt="VP For External Affairs" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
-                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
-                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5">Vice President</span>
-                    <h3 class="text-xs font-bold text-white leading-tight drop-shadow">VP External Affairs</h3>
-                </div>
-            </div>
-
-            <!-- Card 8: VP Internal -->
             <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
                 <img src="vpinternal.jpg" alt="VP For Internal Affairs" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
@@ -693,34 +550,14 @@
                 </div>
             </div>
 
-            <!-- Card 9: VP Logistics -->
             <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
-                <img src="vplogistics.jpg" alt="VP For Logistics and Volunteer's Coordination" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
+                <img src="vpexternal.jpg" alt="VP For External Affairs" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
                     <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5">Vice President</span>
-                    <h3 class="text-xs font-bold text-white leading-tight drop-shadow">VP Logistics & Volunteers</h3>
+                    <h3 class="text-xs font-bold text-white leading-tight drop-shadow">VP External Affairs</h3>
                 </div>
             </div>
 
-            <!-- Card 10: VP Media -->
-            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
-                <img src="vpmedia.jpg" alt="VP For Media" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
-                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
-                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5">Vice President</span>
-                    <h3 class="text-xs font-bold text-white leading-tight drop-shadow">VP Media</h3>
-                </div>
-            </div>
-
-            <!-- Card 11: VP Recreation -->
-            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
-                <img src="vprnw.jpg" alt="VP For Recreation and Wellness" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
-                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
-                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5">Vice President</span>
-                    <h3 class="text-xs font-bold text-white leading-tight drop-shadow">VP Recreation & Wellness</h3>
-                </div>
-            </div>
-
-            <!-- Card 12: VP Secretariat -->
             <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
                 <img src="vpsec.jpg" alt="VP For Secretariat" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
@@ -729,12 +566,76 @@
                 </div>
             </div>
 
-            <!-- Card 13: VP Tech -->
+            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
+                <img src="vpbusiness.jpg" alt="VP For Business and Finance" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
+                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5">Vice President</span>
+                    <h3 class="text-xs font-bold text-white leading-tight drop-shadow">VP Business & Finance</h3>
+                </div>
+            </div>
+
+            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
+                <img src="vpevents.jpg" alt="VP For Events and Programs" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
+                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5">Vice President</span>
+                    <h3 class="text-xs font-bold text-white leading-tight drop-shadow">VP Events & Programs</h3>
+                </div>
+            </div>
+
+            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
+                <img src="vpcareer.jpg" alt="VP For Career Development" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
+                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5">Vice President</span>
+                    <h3 class="text-xs font-bold text-white leading-tight drop-shadow">VP Career Development</h3>
+                </div>
+            </div>
+
+            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
+                <img src="vpcommunity.jpg" alt="VP For Community and Social Responsibility" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
+                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5">Vice President</span>
+                    <h3 class="text-xs font-bold text-white leading-tight drop-shadow">VP Community & Social Responsibility</h3>
+                </div>
+            </div>
+
             <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
                 <img src="vptech.jpg" alt="VP For Technical Operations" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
                     <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5">Vice President</span>
                     <h3 class="text-xs font-bold text-white leading-tight drop-shadow">VP Technical Operations</h3>
+                </div>
+            </div>
+
+            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
+                <img src="vpcreatives.jpg" alt="VP For Creatives and Communication" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
+                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5">Vice President</span>
+                    <h3 class="text-xs font-bold text-white leading-tight drop-shadow">VP Creatives & Communication</h3>
+                </div>
+            </div>
+
+            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
+                <img src="vpmedia.jpg" alt="VP For Media" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
+                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5">Vice President</span>
+                    <h3 class="text-xs font-bold text-white leading-tight drop-shadow">VP Media</h3>
+                </div>
+            </div>
+
+            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
+                <img src="vplogistics.jpg" alt="VP For Logistics and Volunteer's Coordination" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
+                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5">Vice President</span>
+                    <h3 class="text-xs font-bold text-white leading-tight drop-shadow">VP Logistics & Volunteers</h3>
+                </div>
+            </div>
+
+        
+            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
+                <img src="vprnw.jpg" alt="VP For Recreation and Wellness" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
+                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5">Vice President</span>
+                    <h3 class="text-xs font-bold text-white leading-tight drop-shadow">VP Recreation & Wellness</h3>
                 </div>
             </div>
 
