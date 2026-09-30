@@ -3,377 +3,895 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CPE Web Portal - Executive Officers</title>
+    <title>CPE Web Portal - Arcade Edition</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Press+Start+2P&family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="style.css">
+
+    <style>
+        body {
+            font-family: 'Fira Code', monospace;
+        }
+
+        .font-arcade {
+            font-family: 'Press Start 2P', monospace;
+        }
+
+        /* Scanlines Overlay */
+        .scanline-bg {
+            background: linear-gradient(
+                to bottom,
+                rgba(255,255,255,0),
+                rgba(255,255,255,0) 50%,
+                rgba(0, 0, 0, 0.3) 50%,
+                rgba(0, 0, 0, 0.3)
+            );
+            background-size: 100% 4px;
+        }
+
+        /* Hacker Scanner Loading Screen */
+        #cpe-loader {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background-color: #030712;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        #cpe-loader.hidden-loader {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .radar-sweep {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            border: 2px solid rgba(6, 182, 212, 0.4);
+            position: relative;
+            background: radial-gradient(circle, rgba(6,182,212,0.1) 0%, rgba(0,0,0,0.8) 70%);
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+        }
+
+        .radar-sweep::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 50%;
+            height: 50%;
+            background: linear-gradient(45deg, rgba(6, 182, 212, 0.8), transparent);
+            transform-origin: 0% 0%;
+            border-radius: 100% 0 0 0;
+            animation: sweep 2s linear infinite;
+        }
+
+        @keyframes sweep {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .scan-line-bar {
+            width: 100%;
+            height: 3px;
+            background: #06b6d4;
+            box-shadow: 0 0 15px #06b6d4;
+            position: absolute;
+            animation: scanBar 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes scanBar {
+            0% { top: 0%; }
+            100% { top: 100%; }
+        }
+
+        /* Glitch Effect */
+        .glitch-text {
+            position: relative;
+            display: inline-block;
+        }
+
+        .glitch-text::before,
+        .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.8;
+        }
+
+        .glitch-text::before {
+            left: 2px;
+            text-shadow: -2px 0 #ff0055;
+            clip: rect(24px, 550px, 90px, 0);
+            animation: glitch-anim-1 2s infinite linear alternate-reverse;
+        }
+
+        .glitch-text::after {
+            left: -2px;
+            text-shadow: -2px 0 #00e5ff;
+            clip: rect(85px, 550px, 140px, 0);
+            animation: glitch-anim-2 2.5s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-anim-1 {
+            0% { clip: rect(10px, 9999px, 30px, 0); }
+            20% { clip: rect(42px, 9999px, 78px, 0); }
+            40% { clip: rect(12px, 9999px, 55px, 0); }
+            60% { clip: rect(60px, 9999px, 10px, 0); }
+            80% { clip: rect(30px, 9999px, 85px, 0); }
+            100% { clip: rect(90px, 9999px, 20px, 0); }
+        }
+
+        @keyframes glitch-anim-2 {
+            0% { clip: rect(65px, 9999px, 100px, 0); }
+            20% { clip: rect(15px, 9999px, 40px, 0); }
+            40% { clip: rect(80px, 9999px, 5px, 0); }
+            60% { clip: rect(25px, 9999px, 95px, 0); }
+            80% { clip: rect(50px, 9999px, 30px, 0); }
+            100% { clip: rect(10px, 9999px, 70px, 0); }
+        }
+
+        /* Cyberpunk Box Frame */
+        .cyber-border {
+            position: relative;
+            border: 1px solid rgba(6, 182, 212, 0.4);
+            background: rgba(15, 23, 42, 0.8);
+            box-shadow: 0 0 25px rgba(6, 182, 212, 0.15);
+        }
+
+        .cyber-border::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            width: 12px;
+            height: 12px;
+            border-top: 3px solid #06b6d4;
+            border-left: 3px solid #06b6d4;
+        }
+
+        .cyber-border::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            width: 12px;
+            height: 12px;
+            border-bottom: 3px solid #06b6d4;
+            border-right: 3px solid #06b6d4;
+        }
+
+        /* Arcade Frame Neon glow */
+        .arcade-neon-border {
+            border: 2px solid #e11d48;
+            box-shadow: 0 0 20px #f43f5e, inset 0 0 15px #f43f5e;
+        }
+
+        /* Binary Engine Custom Styles */
+        .game-display {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            color: #f0f9ff;
+            text-shadow: 0 0 25px rgba(56, 189, 248, 0.5);
+            min-height: 1.2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .game-input {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.25rem;
+            letter-spacing: 0.12em;
+            background: rgba(3, 7, 18, 0.8);
+            border: 2px solid rgba(56, 189, 248, 0.3);
+            color: #e0f2fe;
+            padding: 0.6rem 1rem;
+            border-radius: 12px;
+            width: 100%;
+            outline: none;
+            transition: all 0.2s ease;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .game-input:focus {
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.25), inset 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .game-input.flash-correct {
+            border-color: #22c55e;
+            background: rgba(34, 197, 94, 0.15);
+            animation: flashGreen 0.4s ease;
+        }
+
+        .game-input.flash-wrong {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.15);
+            animation: shake 0.4s ease;
+        }
+
+        @keyframes flashGreen {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
+        }
+
+        .mode-pill {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            color: #cbd5e1;
+            padding: 0.4rem 0.8rem;
+            border-radius: 999px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .mode-pill:hover {
+            border-color: rgba(56, 189, 248, 0.5);
+            color: #f0f9ff;
+        }
+
+        .mode-pill.active {
+            background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%);
+            border-color: #38bdf8;
+            color: #030712;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+            font-weight: 700;
+        }
+
+        .stat-tile {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.15);
+            border-radius: 12px;
+            padding: 0.75rem;
+            backdrop-filter: blur(8px);
+            transition: transform 0.2s ease;
+        }
+
+        .stat-tile:hover {
+            transform: translateY(-2px);
+        }
+
+        .stat-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #94a3b8;
+        }
+
+        .stat-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #f0f9ff;
+            line-height: 1;
+            margin-top: 0.3rem;
+        }
+
+        .stat-value.danger { color: #f87171; }
+        .stat-value.success { color: #4ade80; }
+        .stat-value.accent { color: #38bdf8; }
+
+        .btn-cyber {
+            background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
+            border: none;
+            color: white;
+            padding: 0.6rem 1.5rem;
+            border-radius: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 8px 24px -8px rgba(14, 165, 233, 0.6);
+        }
+
+        .btn-cyber:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px -8px rgba(14, 165, 233, 0.8);
+        }
+
+        .btn-ghost {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            color: #cbd5e1;
+            padding: 0.6rem 1.2rem;
+            border-radius: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .btn-ghost:hover {
+            border-color: #38bdf8;
+            color: #f0f9ff;
+            background: rgba(56, 189, 248, 0.1);
+        }
+
+        .timer-bar-track {
+            height: 6px;
+            background: rgba(148, 163, 184, 0.15);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .timer-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4ade80 0%, #facc15 60%, #f87171 100%);
+            transition: width 0.3s linear;
+            border-radius: 999px;
+        }
+
+        .streak-flame {
+            color: #fb923c;
+            animation: pulse 1.2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.2); }
+        }
+
+        .game-over-panel {
+            background: rgba(3, 7, 18, 0.95);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            border-radius: 16px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
+        }
+
+        .bit-chart {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .bit-box {
+            font-family: 'JetBrains Mono', monospace;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 6px;
+            padding: 3px 6px;
+            font-size: 0.65rem;
+            color: #94a3b8;
+        }
+    </style>
 </head>
 
-<body class="bg-gray-950 text-gray-100 min-h-screen flex flex-col justify-between">
+<body class="bg-gray-950 text-gray-100 min-h-screen flex flex-col justify-between scanline-bg">
 
-    <header class="bg-gray-900 border-b border-gray-800 sticky top-0 z-50">
+    <!-- WAITING SCAN (CPE LOADER SCREEN) -->
+    <div id="cpe-loader">
+        <div class="relative flex flex-col items-center">
+            <div class="radar-sweep mb-6 flex items-center justify-center">
+                <span class="text-cyan-400 font-bold text-xl tracking-widest z-10 animate-pulse">CPE</span>
+            </div>
+            <div class="text-cyan-400 font-mono text-sm tracking-widest uppercase mb-2 flex items-center gap-2">
+                <span class="inline-block w-2 h-2 bg-cyan-400 rounded-full animate-ping"></span>
+                <span>SYSTEM SCAN IN PROGRESS...</span>
+            </div>
+            <div id="loader-status" class="text-gray-400 text-xs font-mono h-5">INITIALIZING CORE...</div>
+            <div class="w-64 bg-gray-900 border border-cyan-900/50 h-2 rounded-full mt-4 overflow-hidden p-0.5">
+                <div id="loader-bar" class="bg-cyan-500 h-full w-0 transition-all duration-300 shadow-[0_0_10px_#06b6d4]"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HEADER NAVIGATION -->
+    <header class="bg-gray-900/90 border-b border-gray-800 sticky top-0 z-50 backdrop-blur-md">
         <div class="container-lg py-3 flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <div class="m2-container">
                     <div class="logo">
-                
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="fill-cyan-400 w-6 h-6">
                             <path d="M20 3H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h6l-2 3v1h8v-1l-2-3h6c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 12H4V5h16v10z"/>
                         </svg>
-                        <span>SCPES</span>
+                        <span class="text-cyan-400 font-bold">SCPES</span>
                     </div>
                 </div>
                 <div class="flex flex-col">
-                    <span class="font-bold text-lg text-white leading-tight">CPE WEB PORTAL</span>
-                    <span class="text-blue-400 text-[10px] uppercase tracking-wider font-semibold">Society of Computer Engineering</span>
+                    <span class="font-bold text-lg text-white leading-tight tracking-wider">CPE WEB PORTAL</span>
+                    <span class="text-cyan-400 text-[10px] uppercase tracking-wider font-semibold">Society of Computer Engineering</span>
                 </div>
             </div>
 
-            <nav class="hidden md:flex gap-6 text-sm font-medium text-gray-300">
-                <a href="#" class="hover:text-blue-400 transition-colors">Home</a>
-                <a href="#core" class="hover:text-blue-400 transition-colors">Core Discipline</a>
-                <a href="officers.html" class="hover:text-blue-400 transition-colors">Officers & Faculty</a>
-                <a href="faq.html" class="hover:text-blue-400 transition-colors">FAQ's</a>
-            
+            <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-gray-300">
+                <a href="#" onclick="showPortalView()" class="hover:text-cyan-400 transition-colors">Home</a>
+                <a href="#hacker-hero" onclick="showPortalView()" class="hover:text-cyan-400 transition-colors">Terminal Portal</a>
+                <!-- ARCADE NAV BUTTON -->
+                <button onclick="showArcadeView()" class="px-3 py-1 bg-gradient-to-r from-rose-600 to-fuchsia-600 hover:from-rose-500 hover:to-fuchsia-500 text-white font-bold text-xs uppercase tracking-wider rounded-lg shadow-[0_0_12px_rgba(244,63,94,0.6)] flex items-center gap-2 transition-all transform hover:scale-105">
+                    <i class="bi bi-controller text-base"></i> ARCADE
+                </button>
+                <a href="#core" onclick="showPortalView()" class="hover:text-cyan-400 transition-colors">Core Discipline</a>
+                <a href="officers.html" class="hover:text-cyan-400 transition-colors">Officers & Faculty</a>
+                <a href="faq.html" class="hover:text-cyan-400 transition-colors">FAQ's</a>
             </nav>
         </div>
     </header>
 
-    <main class="container-lg my-4">
-        <div class="carousel-container position-relative">
-            <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5000">
+    <!-- MAIN PORTAL CONTENT VIEW -->
+    <div id="portal-view">
+        <!-- HACKER THEME HERO SECTION -->
+        <section id="hacker-hero" class="container-lg my-6">
+            <div class="cyber-border rounded-xl p-6 md:p-10 relative overflow-hidden">
+                <div class="absolute inset-0 bg-[radial-gradient(#06b6d4_1px,transparent_1px)] [background-size:16px_16px] opacity-10 pointer-events-none"></div>
 
-    
-                <div class="position-absolute top-0 end-0 m-3 z-3 d-none d-md-flex gap-2">
-                    <button type="button" class="btn btn-sm btn-dark bg-opacity-50 text-white rounded-pill px-3 border-0 backdrop-blur" id="pauseCarouselBtn">
-                        <i class="bi bi-pause-fill" id="pauseIcon"></i> Pause
-                    </button>
-                </div>
-                <!-- Carousel Indicators -->
-                <div class="carousel-indicators z-3">
-                    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+                    <div class="lg:col-span-7 space-y-4">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/80 border border-cyan-500/40 text-cyan-400 text-xs font-mono">
+                            <span class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
+                            SYSTEM ACCESS: GRANTED
+                        </div>
 
-                <!-- Slide Wrapper -->
-                <div class="carousel-inner">
-                    <!-- Slide 1 -->
-                    <div class="carousel-item active">
-                        <img src="assets/C1.png" alt="Hardware & Microcontrollers">
-                        <div class="carousel-overlay"></div>
-                        <div class="carousel-caption-custom">
-                            <span class="badge bg-primary badge-pill mb-2">Hardware Innovation</span>
-                            <h2 class="fw-bold fs-3 mb-2">Embedded Systems & Robotics</h2>
-                            <p class="text-light text-opacity-90 mb-3">Architecting next-generation IoT solutions, microprocessors, and custom circuit design tailored for automated high-performance tasks.</p>
+                        <h1 class="text-3xl md:text-5xl font-extrabold text-white tracking-tight">
+                            <span class="glitch-text text-cyan-400" data-text="CPE WEB PORTAL">CPE WEB PORTAL</span>
+                            <span class="block text-2xl md:text-3xl text-gray-300 font-mono mt-1">&lt;HACKER_EDITION /&gt;</span>
+                        </h1>
+
+                        <div class="bg-gray-950/90 border border-cyan-900/60 rounded-lg p-4 font-mono text-sm leading-relaxed text-cyan-300 shadow-inner min-h-[110px]">
+                            <span class="text-emerald-400">root@cpe-portal:~#</span> 
+                            <span id="typewriter-text" class="text-gray-200"></span><span class="inline-block w-2 h-4 bg-cyan-400 ml-1 animate-ping"></span>
+                        </div>
+
+                        <div class="pt-2 flex flex-wrap gap-4">
+                            <a href="#core" class="px-5 py-2.5 bg-cyan-600 hover:bg-cyan-500 text-black font-bold text-xs uppercase tracking-wider rounded transition-all duration-300 shadow-[0_0_15px_rgba(6,182,212,0.4)] flex items-center gap-2">
+                                <i class="bi bi-terminal-fill"></i> Explore Modules
+                            </a>
+                            <button onclick="showArcadeView()" class="px-5 py-2.5 bg-gradient-to-r from-rose-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 text-white font-bold text-xs uppercase tracking-wider rounded transition-all duration-300 shadow-[0_0_15px_rgba(225,29,72,0.5)] flex items-center gap-2">
+                                <i class="bi bi-controller"></i> Play Arcade Games
+                            </button>
                         </div>
                     </div>
 
-                    <div class="carousel-item">
-                        <img src="assets/workshop.png" alt="Data Science & Servers">
-                        <div class="carousel-overlay"></div>
-                        <div class="carousel-caption-custom">
-                            <span class="badge bg-info text-dark badge-pill mb-2">Career Talks</span>
-                            <h2 class="fw-bold fs-3 mb-2">Colloquium and Workshops</h2>
-                            <p class="text-light text-opacity-90 mb-3">At University of the East–Manila, we have colloquiums, career talks, and workshops that help students gain knowledge, skills, and career insights.</p>
-
+                    <div class="lg:col-span-5">
+                        <div class="relative group rounded-lg overflow-hidden border border-cyan-500/30 bg-gray-900">
+                            <div class="scan-line-bar z-20"></div>
+                            <img src="assets/C1.png" alt="CPE Hacker Portal Visual" class="w-full h-64 object-cover filter brightness-90 contrast-125 group-hover:scale-105 transition-transform duration-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-gray-950 via-transparent to-transparent opacity-80"></div>
+                            <div class="absolute bottom-3 left-3 right-3 flex justify-between items-center text-[10px] text-cyan-400 font-mono bg-black/60 backdrop-blur px-3 py-1.5 rounded border border-cyan-900/50">
+                                <span>IMG_ID: CPE_HARDWARE_01</span>
+                                <span class="text-emerald-400">STATUS: ACTIVE SCAN</span>
+                            </div>
                         </div>
-
                     </div>
-
-                    <div class="carousel-item">
-                        <img src="assets/extra.png" alt="Cybersecurity & Code">
-                        <div class="carousel-overlay"></div>
-                        <div class="carousel-caption-custom">
-                            <span class="badge bg-warning text-dark badge-pill mb-2">Extracurricular</span>
-                            <h2 class="fw-bold fs-3 mb-2">Events & Extracurricular</h2>
-                            <p class="text-light text-opacity-90 mb-3">We also have extracurricular activities and events like Freshmen Huddle, Tech Clash, video game tournaments, and other student activities that promote teamwork and enjoyment.</p>
-                        </div>
-
-                    </div>
-
                 </div>
-
-                <!-- Custom Navigation Controls -->
-                <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
             </div>
-        </div>
-    </main>
-
-    <section class="container-lg my-5" id="features">
-        <div class="text-center mb-4">
-            <span class="text-blue-400 font-semibold uppercase text-[10px] tracking-widest">Core Disciplines</span>
-    
-     <h2 class="font-bold text-xl mb-1 bg-gradient-to-r from-white via-gray-200 to-white bg-clip-text text-transparent">
-        Computer Engineering Core Focus Areas
-        </h2>
-    
-    <p class="text-gray-400 text-xs">Explore the primary modules within our CPE curriculum.</p>
-</div>
         </section>
 
+        <!-- CAROUSEL SECTION -->
+        <main class="container-lg my-4">
+            <div class="carousel-container position-relative">
+                <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5000">
 
-<section id="core" class="scroll-mt-20">
-    <div class="row g-4 justify-content-center">
-
-        <!-- Card 1: HARDWARE -->
-        <div class="col-xl-3 col-lg-6 col-md-6 d-flex justify-content-center">
-            <div class="group cursor-pointer transform transition-all duration-500 hover:scale-105 hover:-rotate-1 w-full max-w-[320px]">
-                <div class="text-white rounded-3xl border border-white/10 bg-gradient-to-br from-[#010101] via-[#090909] to-[#010101] shadow-2xl duration-700 z-10 relative backdrop-blur-xl hover:border-white/25 overflow-hidden hover:shadow-white/5 hover:shadow-3xl h-full flex flex-col justify-between">
-                    <div class="absolute inset-0 z-0 overflow-hidden">
-                        <div class="absolute inset-0 bg-gradient-to-tr from-white/5 to-white/10 opacity-40 group-hover:opacity-60 transition-opacity duration-500"></div>
-                        <div style="animation-delay: 0.5s;" class="absolute -bottom-20 -left-20 w-48 h-48 rounded-full bg-gradient-to-tr from-white/10 to-transparent blur-3xl opacity-30 group-hover:opacity-50 transform group-hover:scale-110 transition-all duration-700 animate-bounce"></div>
-                        <div class="absolute top-10 left-10 w-16 h-16 rounded-full bg-white/5 blur-xl animate-ping"></div>
-                        <div style="animation-delay: 1s;" class="absolute bottom-16 right-16 w-12 h-12 rounded-full bg-white/5 blur-lg animate-ping"></div>
-                        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent transform -skew-x-12 translate-x-full group-hover:translate-x-[-200%] transition-transform duration-1000"></div>
+                    <div class="position-absolute top-0 end-0 m-3 z-3 d-none d-md-flex gap-2">
+                        <button type="button" class="btn btn-sm btn-dark bg-opacity-50 text-white rounded-pill px-3 border-0 backdrop-blur" id="pauseCarouselBtn">
+                            <i class="bi bi-pause-fill" id="pauseIcon"></i> Pause
+                        </button>
                     </div>
-                    <div class="p-8 relative z-10 flex flex-col items-center text-left h-full">
-                        <div class="relative mb-6">
-                            <div class="absolute inset-0 rounded-full border-2 border-white/20 animate-ping"></div>
-                            <div style="animation-delay: 0.5s;" class="absolute inset-0 rounded-full border border-white/10 animate-pulse"></div>
-                            <div class="p-5 rounded-full backdrop-blur-lg border border-white/20 bg-gradient-to-br from-black/80 to-black/60 shadow-2xl transform group-hover:rotate-12 group-hover:scale-110 transition-all duration-500 hover:shadow-white/20">
-                                <div class="transform group-hover:rotate-180 transition-transform duration-700">
-                                    <i class="bi bi-cpu fs-3 text-white"></i>
-                                </div>
+
+                    <div class="carousel-indicators z-3">
+                        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                    </div>
+
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <img src="assets/C1.png" alt="Hardware & Microcontrollers">
+                            <div class="carousel-overlay"></div>
+                            <div class="carousel-caption-custom">
+                                <span class="badge bg-primary badge-pill mb-2">Hardware Innovation</span>
+                                <h2 class="fw-bold fs-3 mb-2">Embedded Systems & Robotics</h2>
+                                <p class="text-light text-opacity-90 mb-3">Architecting next-generation IoT solutions, microprocessors, and custom circuit design tailored for automated high-performance tasks.</p>
                             </div>
                         </div>
-                        <div class="w-full mb-3">
-                            <h3 class="text-xl font-bold bg-gradient-to-r from-white via-gray-100 to-white bg-clip-text text-transparent text-left">Hardware</h3>
+
+                        <div class="carousel-item">
+                            <img src="assets/workshop.png" alt="Data Science & Servers">
+                            <div class="carousel-overlay"></div>
+                            <div class="carousel-caption-custom">
+                                <span class="badge bg-info text-dark badge-pill mb-2">Career Talks</span>
+                                <h2 class="fw-bold fs-3 mb-2">Colloquium and Workshops</h2>
+                                <p class="text-light text-opacity-90 mb-3">At University of the East–Manila, we have colloquiums, career talks, and workshops that help students gain knowledge, skills, and career insights.</p>
+                            </div>
                         </div>
-                        <div class="w-full space-y-2 text-left flex-grow">
-                            <p class="text-blue-400 text-xs font-semibold uppercase tracking-wider">Microprocessors & Arduino</p>
-                            <p class="text-gray-300 text-sm leading-relaxed">
-                                Hands-on experience with electronics design, embedded systems programming, and custom circuit board architectures.
-                            </p>
+
+                        <div class="carousel-item">
+                            <img src="assets/extra.png" alt="Cybersecurity & Code">
+                            <div class="carousel-overlay"></div>
+                            <div class="carousel-caption-custom">
+                                <span class="badge bg-warning text-dark badge-pill mb-2">Extracurricular</span>
+                                <h2 class="fw-bold fs-3 mb-2">Events & Extracurricular</h2>
+                                <p class="text-light text-opacity-90 mb-3">We also have extracurricular activities and events like Freshmen Huddle, Tech Clash, video game tournaments, and other student activities that promote teamwork and enjoyment.</p>
+                            </div>
                         </div>
-                        <div class="mt-6 w-full h-0.5 bg-gradient-to-r from-white/20 via-white/50 to-transparent rounded-full transform group-hover:h-1 transition-all duration-500"></div>
-                        <div class="flex space-x-2 mt-4 opacity-60 group-hover:opacity-100 transition-opacity duration-300 self-center">
-                            <div class="w-2 h-2 bg-white rounded-full animate-bounce"></div>
-                            <div style="animation-delay: 0.1s;" class="w-2 h-2 bg-white rounded-full animate-bounce"></div>
-                            <div style="animation-delay: 0.2s;" class="w-2 h-2 bg-white rounded-full animate-bounce"></div>
+                    </div>
+
+                    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- CORE DISCIPLINE CARDS -->
+        <section class="container-lg my-5" id="features">
+            <div class="text-center mb-4">
+                <span class="text-cyan-400 font-semibold uppercase text-[10px] tracking-widest">Core Disciplines</span>
+                <h2 class="font-bold text-xl mb-1 bg-gradient-to-r from-white via-gray-200 to-white bg-clip-text text-transparent">
+                    Computer Engineering Core Focus Areas
+                </h2>
+                <p class="text-gray-400 text-xs">Explore the primary modules within our CPE curriculum.</p>
+            </div>
+        </section>
+
+        <section id="core" class="scroll-mt-20 container-lg">
+            <div class="row g-4 justify-content-center">
+                <!-- Card 1: HARDWARE -->
+                <div class="col-xl-3 col-lg-6 col-md-6 d-flex justify-content-center">
+                    <div class="group cursor-pointer transform transition-all duration-500 hover:scale-105 hover:-rotate-1 w-full max-w-[320px]">
+                        <div class="text-white rounded-3xl border border-white/10 bg-gradient-to-br from-[#010101] via-[#090909] to-[#010101] shadow-2xl duration-700 z-10 relative backdrop-blur-xl hover:border-cyan-500/40 overflow-hidden hover:shadow-cyan-500/10 hover:shadow-3xl h-full flex flex-col justify-between">
+                            <div class="p-8 relative z-10 flex flex-col items-center text-left h-full">
+                                <div class="relative mb-6">
+                                    <div class="p-5 rounded-full backdrop-blur-lg border border-cyan-500/30 bg-gradient-to-br from-black/80 to-black/60 shadow-2xl">
+                                        <i class="bi bi-cpu fs-3 text-cyan-400"></i>
+                                    </div>
+                                </div>
+                                <h3 class="text-xl font-bold text-white mb-2">Hardware</h3>
+                                <p class="text-cyan-400 text-xs font-semibold uppercase tracking-wider mb-2">Microprocessors & Arduino</p>
+                                <p class="text-gray-300 text-sm leading-relaxed">
+                                    Hands-on experience with electronics design, embedded systems programming, and custom circuit board architectures.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: PROGRAMMING -->
+                <div class="col-xl-3 col-lg-6 col-md-6 d-flex justify-content-center">
+                    <div class="group cursor-pointer transform transition-all duration-500 hover:scale-105 hover:-rotate-1 w-full max-w-[320px]">
+                        <div class="text-white rounded-3xl border border-white/10 bg-gradient-to-br from-[#010101] via-[#090909] to-[#010101] shadow-2xl duration-700 z-10 relative backdrop-blur-xl hover:border-cyan-500/40 overflow-hidden hover:shadow-cyan-500/10 hover:shadow-3xl h-full flex flex-col justify-between">
+                            <div class="p-8 relative z-10 flex flex-col items-center text-left h-full">
+                                <div class="relative mb-6">
+                                    <div class="p-5 rounded-full backdrop-blur-lg border border-cyan-500/30 bg-gradient-to-br from-black/80 to-black/60 shadow-2xl">
+                                        <i class="bi bi-code-slash fs-3 text-cyan-400"></i>
+                                    </div>
+                                </div>
+                                <h3 class="text-xl font-bold text-white mb-2">Programming</h3>
+                                <p class="text-cyan-400 text-xs font-semibold uppercase tracking-wider mb-2">Software Design & Logic</p>
+                                <p class="text-gray-300 text-sm leading-relaxed">
+                                    Master C++, Python, and Java to engineer robust, high-performance software and automated algorithm pipelines.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: NETWORKS -->
+                <div class="col-xl-3 col-lg-6 col-md-6 d-flex justify-content-center">
+                    <div class="group cursor-pointer transform transition-all duration-500 hover:scale-105 hover:-rotate-1 w-full max-w-[320px]">
+                        <div class="text-white rounded-3xl border border-white/10 bg-gradient-to-br from-[#010101] via-[#090909] to-[#010101] shadow-2xl duration-700 z-10 relative backdrop-blur-xl hover:border-cyan-500/40 overflow-hidden hover:shadow-cyan-500/10 hover:shadow-3xl h-full flex flex-col justify-between">
+                            <div class="p-8 relative z-10 flex flex-col items-center text-left h-full">
+                                <div class="relative mb-6">
+                                    <div class="p-5 rounded-full backdrop-blur-lg border border-cyan-500/30 bg-gradient-to-br from-black/80 to-black/60 shadow-2xl">
+                                        <i class="bi bi-diagram-3 fs-3 text-cyan-400"></i>
+                                    </div>
+                                </div>
+                                <h3 class="text-xl font-bold text-white mb-2">Networks</h3>
+                                <p class="text-cyan-400 text-xs font-semibold uppercase tracking-wider mb-2">Cisco Networking & Security</p>
+                                <p class="text-gray-300 text-sm leading-relaxed">
+                                    Design network configurations, manage routing protocols, and enforce enterprise cyber defense systems.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4: EMBEDDED SYSTEMS -->
+                <div class="col-xl-3 col-lg-6 col-md-6 d-flex justify-content-center">
+                    <div class="group cursor-pointer transform transition-all duration-500 hover:scale-105 hover:-rotate-1 w-full max-w-[320px]">
+                        <div class="text-white rounded-3xl border border-white/10 bg-gradient-to-br from-[#010101] via-[#090909] to-[#010101] shadow-2xl duration-700 z-10 relative backdrop-blur-xl hover:border-cyan-500/40 overflow-hidden hover:shadow-cyan-500/10 hover:shadow-3xl h-full flex flex-col justify-between">
+                            <div class="p-8 relative z-10 flex flex-col items-center text-left h-full">
+                                <div class="relative mb-6">
+                                    <div class="p-5 rounded-full backdrop-blur-lg border border-cyan-500/30 bg-gradient-to-br from-black/80 to-black/60 shadow-2xl">
+                                        <i class="bi bi-memory fs-3 text-cyan-400"></i>
+                                    </div>
+                                </div>
+                                <h3 class="text-xl font-bold text-white mb-2">Embedded</h3>
+                                <p class="text-cyan-400 text-xs font-semibold uppercase tracking-wider mb-2">Real-Time Control Systems</p>
+                                <p class="text-gray-300 text-sm leading-relaxed">
+                                    Integrate firmware with hardware, managing interrupts, RTOS kernels, and ultra-low latency compute units.
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <!-- Card 2: PROGRAMMING -->
-        <div class="col-xl-3 col-lg-6 col-md-6 d-flex justify-content-center">
-            <div class="group cursor-pointer transform transition-all duration-500 hover:scale-105 hover:-rotate-1 w-full max-w-[320px]">
-                <div class="text-white rounded-3xl border border-white/10 bg-gradient-to-br from-[#010101] via-[#090909] to-[#010101] shadow-2xl duration-700 z-10 relative backdrop-blur-xl hover:border-white/25 overflow-hidden hover:shadow-white/5 hover:shadow-3xl h-full flex flex-col justify-between">
-                    <div class="absolute inset-0 z-0 overflow-hidden">
-                        <div class="absolute inset-0 bg-gradient-to-tr from-white/5 to-white/10 opacity-40 group-hover:opacity-60 transition-opacity duration-500"></div>
-                        <div style="animation-delay: 0.5s;" class="absolute -bottom-20 -left-20 w-48 h-48 rounded-full bg-gradient-to-tr from-white/10 to-transparent blur-3xl opacity-30 group-hover:opacity-50 transform group-hover:scale-110 transition-all duration-700 animate-bounce"></div>
-                        <div class="absolute top-10 left-10 w-16 h-16 rounded-full bg-white/5 blur-xl animate-ping"></div>
-                        <div style="animation-delay: 1s;" class="absolute bottom-16 right-16 w-12 h-12 rounded-full bg-white/5 blur-lg animate-ping"></div>
-                        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent transform -skew-x-12 translate-x-full group-hover:translate-x-[-200%] transition-transform duration-1000"></div>
+        <!-- CAREERS SECTION -->
+        <section class="py-12 border-t border-gray-800/60 bg-gray-900/40 my-6">
+            <div class="container-lg">
+                <div class="text-center mb-10">
+                    <span class="text-xs font-bold text-cyan-400 uppercase tracking-widest">Future Opportunities</span>
+                    <h3 class="text-2xl font-bold text-white mt-1">Computer Engineering Career Tracks</h3>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                    <div class="p-5 rounded-xl bg-gray-900 border border-gray-800 hover:border-cyan-500/50 transition-all duration-300">
+                        <div class="w-10 h-10 rounded-lg bg-cyan-500/10 flex items-center justify-center text-cyan-400 mb-4">
+                            <i class="bi bi-memory text-xl"></i>
+                        </div>
+                        <h4 class="text-base font-bold text-white mb-2">Embedded Systems & IoT Engineer</h4>
+                        <p class="text-xs text-gray-400 leading-relaxed">Design microcontrollers, IoT sensor networks, firmware, and real-time automated hardware controllers.</p>
                     </div>
-                    <div class="p-8 relative z-10 flex flex-col items-center text-left h-full">
-                        <div class="relative mb-6">
-                            <div class="absolute inset-0 rounded-full border-2 border-white/20 animate-ping"></div>
-                            <div style="animation-delay: 0.5s;" class="absolute inset-0 rounded-full border border-white/10 animate-pulse"></div>
-                            <div class="p-5 rounded-full backdrop-blur-lg border border-white/20 bg-gradient-to-br from-black/80 to-black/60 shadow-2xl transform group-hover:rotate-12 group-hover:scale-110 transition-all duration-500 hover:shadow-white/20">
-                                <div class="transform group-hover:rotate-180 transition-transform duration-700">
-                                    <i class="bi bi-code-slash fs-3 text-white"></i>
-                                </div>
-                            </div>
+
+                    <div class="p-5 rounded-xl bg-gray-900 border border-gray-800 hover:border-cyan-500/50 transition-all duration-300">
+                        <div class="w-10 h-10 rounded-lg bg-cyan-500/10 flex items-center justify-center text-cyan-400 mb-4">
+                            <i class="bi bi-router text-xl"></i>
                         </div>
-                        <div class="w-full mb-3">
-                            <h3 class="text-xl font-bold bg-gradient-to-r from-white via-gray-100 to-white bg-clip-text text-transparent text-left">Programming</h3>
+                        <h4 class="text-base font-bold text-white mb-2">Network & Systems Architect</h4>
+                        <p class="text-xs text-gray-400 leading-relaxed">Configure enterprise network topologies, IP routing algorithms, and secure data communications systems.</p>
+                    </div>
+
+                    <div class="p-5 rounded-xl bg-gray-900 border border-gray-800 hover:border-cyan-500/50 transition-all duration-300">
+                        <div class="w-10 h-10 rounded-lg bg-cyan-500/10 flex items-center justify-center text-cyan-400 mb-4">
+                            <i class="bi bi-file-earmark-code text-xl"></i>
                         </div>
-                        <div class="w-full space-y-2 text-left flex-grow">
-                            <p class="text-blue-400 text-xs font-semibold uppercase tracking-wider">Software Design & Logic</p>
-                            <p class="text-gray-300 text-sm leading-relaxed">
-                                Master C++, Python, and Java to engineer robust, high-performance software and automated algorithm pipelines.
-                            </p>
-                        </div>
-                        <div class="mt-6 w-full h-0.5 bg-gradient-to-r from-white/20 via-white/50 to-transparent rounded-full transform group-hover:h-1 transition-all duration-500"></div>
-                        <div class="flex space-x-2 mt-4 opacity-60 group-hover:opacity-100 transition-opacity duration-300 self-center">
-                            <div class="w-2 h-2 bg-white rounded-full animate-bounce"></div>
-                            <div style="animation-delay: 0.1s;" class="w-2 h-2 bg-white rounded-full animate-bounce"></div>
-                            <div style="animation-delay: 0.2s;" class="w-2 h-2 bg-white rounded-full animate-bounce"></div>
-                        </div>
+                        <h4 class="text-base font-bold text-white mb-2">Software & Systems Developer</h4>
+                        <p class="text-xs text-gray-400 leading-relaxed">Develop low-level software drivers, system utilities, web platforms, and automated logic control pipelines.</p>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Card 3: NETWORKS -->
-        <div class="col-xl-3 col-lg-6 col-md-6 d-flex justify-content-center">
-            <div class="group cursor-pointer transform transition-all duration-500 hover:scale-105 hover:-rotate-1 w-full max-w-[320px]">
-                <div class="text-white rounded-3xl border border-white/10 bg-gradient-to-br from-[#010101] via-[#090909] to-[#010101] shadow-2xl duration-700 z-10 relative backdrop-blur-xl hover:border-white/25 overflow-hidden hover:shadow-white/5 hover:shadow-3xl h-full flex flex-col justify-between">
-                    <div class="absolute inset-0 z-0 overflow-hidden">
-                        <div class="absolute inset-0 bg-gradient-to-tr from-white/5 to-white/10 opacity-40 group-hover:opacity-60 transition-opacity duration-500"></div>
-                        <div style="animation-delay: 0.5s;" class="absolute -bottom-20 -left-20 w-48 h-48 rounded-full bg-gradient-to-tr from-white/10 to-transparent blur-3xl opacity-30 group-hover:opacity-50 transform group-hover:scale-110 transition-all duration-700 animate-bounce"></div>
-                        <div class="absolute top-10 left-10 w-16 h-16 rounded-full bg-white/5 blur-xl animate-ping"></div>
-                        <div style="animation-delay: 1s;" class="absolute bottom-16 right-16 w-12 h-12 rounded-full bg-white/5 blur-lg animate-ping"></div>
-                        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent transform -skew-x-12 translate-x-full group-hover:translate-x-[-200%] transition-transform duration-1000"></div>
-                    </div>
-                    <div class="p-8 relative z-10 flex flex-col items-center text-left h-full">
-                        <div class="relative mb-6">
-                            <div class="absolute inset-0 rounded-full border-2 border-white/20 animate-ping"></div>
-                            <div style="animation-delay: 0.5s;" class="absolute inset-0 rounded-full border border-white/10 animate-pulse"></div>
-                            <div class="p-5 rounded-full backdrop-blur-lg border border-white/20 bg-gradient-to-br from-black/80 to-black/60 shadow-2xl transform group-hover:rotate-12 group-hover:scale-110 transition-all duration-500 hover:shadow-white/20">
-                                <div class="transform group-hover:rotate-180 transition-transform duration-700">
-                                    <i class="bi bi-diagram-3 fs-3 text-white"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="w-full mb-3">
-                            <h3 class="text-xl font-bold bg-gradient-to-r from-white via-gray-100 to-white bg-clip-text text-transparent text-left">Networks</h3>
-                        </div>
-                        <div class="w-full space-y-2 text-left flex-grow">
-                            <p class="text-blue-400 text-xs font-semibold uppercase tracking-wider">Cisco Networking & Security</p>
-                            <p class="text-gray-300 text-sm leading-relaxed">
-                                Design network configurations, manage routing protocols, and enforce enterprise cyber defense systems.
-                            </p>
-                        </div>
-                        <div class="mt-6 w-full h-0.5 bg-gradient-to-r from-white/20 via-white/50 to-transparent rounded-full transform group-hover:h-1 transition-all duration-500"></div>
-                        <div class="flex space-x-2 mt-4 opacity-60 group-hover:opacity-100 transition-opacity duration-300 self-center">
-                            <div class="w-2 h-2 bg-white rounded-full animate-bounce"></div>
-                            <div style="animation-delay: 0.1s;" class="w-2 h-2 bg-white rounded-full animate-bounce"></div>
-                            <div style="animation-delay: 0.2s;" class="w-2 h-2 bg-white rounded-full animate-bounce"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Card 4: EMBEDDED SYSTEMS -->
-        <div class="col-xl-3 col-lg-6 col-md-6 d-flex justify-content-center">
-            <div class="group cursor-pointer transform transition-all duration-500 hover:scale-105 hover:-rotate-1 w-full max-w-[320px]">
-                <div class="text-white rounded-3xl border border-white/10 bg-gradient-to-br from-[#010101] via-[#090909] to-[#010101] shadow-2xl duration-700 z-10 relative backdrop-blur-xl hover:border-white/25 overflow-hidden hover:shadow-white/5 hover:shadow-3xl h-full flex flex-col justify-between">
-                    <div class="absolute inset-0 z-0 overflow-hidden">
-                        <div class="absolute inset-0 bg-gradient-to-tr from-white/5 to-white/10 opacity-40 group-hover:opacity-60 transition-opacity duration-500"></div>
-                        <div style="animation-delay: 0.5s;" class="absolute -bottom-20 -left-20 w-48 h-48 rounded-full bg-gradient-to-tr from-white/10 to-transparent blur-3xl opacity-30 group-hover:opacity-50 transform group-hover:scale-110 transition-all duration-700 animate-bounce"></div>
-                        <div class="absolute top-10 left-10 w-16 h-16 rounded-full bg-white/5 blur-xl animate-ping"></div>
-                        <div style="animation-delay: 1s;" class="absolute bottom-16 right-16 w-12 h-12 rounded-full bg-white/5 blur-lg animate-ping"></div>
-                        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent transform -skew-x-12 translate-x-full group-hover:translate-x-[-200%] transition-transform duration-1000"></div>
-                    </div>
-                    <div class="p-8 relative z-10 flex flex-col items-center text-left h-full">
-                        <div class="relative mb-6">
-                            <div class="absolute inset-0 rounded-full border-2 border-white/20 animate-ping"></div>
-                            <div style="animation-delay: 0.5s;" class="absolute inset-0 rounded-full border border-white/10 animate-pulse"></div>
-                            <div class="p-5 rounded-full backdrop-blur-lg border border-white/20 bg-gradient-to-br from-black/80 to-black/60 shadow-2xl transform group-hover:rotate-12 group-hover:scale-110 transition-all duration-500 hover:shadow-white/20">
-                                <div class="transform group-hover:rotate-180 transition-transform duration-700">
-                                    <i class="bi bi-memory fs-3 text-white"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="w-full mb-3">
-                            <h3 class="text-xl font-bold bg-gradient-to-r from-white via-gray-100 to-white bg-clip-text text-transparent text-left">Embedded</h3>
-                        </div>
-                        <div class="w-full space-y-2 text-left flex-grow">
-                            <p class="text-blue-400 text-xs font-semibold uppercase tracking-wider">Real-Time Control Systems</p>
-                            <p class="text-gray-300 text-sm leading-relaxed">
-                                Integrate firmware with hardware, managing interrupts, RTOS kernels, and ultra-low latency compute units.
-                            </p>
-                        </div>
-                        <div class="mt-6 w-full h-0.5 bg-gradient-to-r from-white/20 via-white/50 to-transparent rounded-full transform group-hover:h-1 transition-all duration-500"></div>
-                        <div class="flex space-x-2 mt-4 opacity-60 group-hover:opacity-100 transition-opacity duration-300 self-center">
-                            <div class="w-2 h-2 bg-white rounded-full animate-bounce"></div>
-                            <div style="animation-delay: 0.1s;" class="w-2 h-2 bg-white rounded-full animate-bounce"></div>
-                            <div style="animation-delay: 0.2s;" class="w-2 h-2 bg-white rounded-full animate-bounce"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+        </section>
     </div>
-</section>
 
-
-<!-- Careers -->
-<section class="py-12 border-t border-gray-800/60 bg-gray-900/40">
-    <div class="container-lg">
-        <div class="text-center mb-10">
-            <span class="text-xs font-bold text-blue-400 uppercase tracking-widest">Future Opportunities</span>
-            <h3 class="text-2xl font-bold text-white mt-1">Computer Engineering Career Tracks</h3>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            
-            <div class="p-5 rounded-xl bg-gray-900 border border-gray-800 hover:border-blue-500/50 transition-all duration-300">
-                <div class="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400 mb-4">
-                    <i class="bi bi-memory text-xl"></i>
+    <!-- ARCADE SECTION VIEW (DISPLAYED WHEN PRESSED) -->
+    <div id="arcade-view" class="hidden container-lg my-8">
+        <div class="bg-gray-900 rounded-2xl arcade-neon-border p-6 md:p-8 relative">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 border-b border-rose-900/50 pb-4">
+                <div>
+                    <h2 class="text-2xl md:text-3xl font-bold font-arcade text-rose-500 tracking-wider">CPE RETRO ARCADE</h2>
+                    <p class="text-gray-400 text-xs font-mono mt-1">Select a game below to launch interactive retro mode.</p>
                 </div>
-                <h4 class="text-base font-bold text-white mb-2">Embedded Systems & IoT Engineer</h4>
-                <p class="text-xs text-gray-400 leading-relaxed">Design microcontrollers, IoT sensor networks, firmware, and real-time automated hardware controllers.</p>
+                <button onclick="showPortalView()" class="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-lg text-xs font-mono border border-gray-700 flex items-center gap-2">
+                    <i class="bi bi-arrow-left"></i> Return to Main Portal
+                </button>
             </div>
 
-            <div class="p-5 rounded-xl bg-gray-900 border border-gray-800 hover:border-blue-500/50 transition-all duration-300">
-                <div class="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400 mb-4">
-                    <i class="bi bi-router text-xl"></i>
-                </div>
-                <h4 class="text-base font-bold text-white mb-2">Network & Systems Architect</h4>
-                <p class="text-xs text-gray-400 leading-relaxed">Configure enterprise network topologies, IP routing algorithms, and secure data communications systems.</p>
-            </div>
+            <!-- Arcade Machine Screen Container -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Game Selection Menu -->
+                <div class="lg:col-span-4 space-y-3">
+                    <div onclick="launchSnake()" class="p-4 bg-gray-950 border-2 border-emerald-500/60 hover:border-emerald-400 rounded-xl cursor-pointer transition-all hover:scale-102 group">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-arcade text-lg">
+                                01
+                            </div>
+                            <div>
+                                <h3 class="font-arcade text-sm text-emerald-400 group-hover:underline">CYBER SNAKE</h3>
+                                <p class="text-[11px] text-gray-400 font-mono">Classic grid navigation algorithm game.</p>
+                            </div>
+                        </div>
+                    </div>
 
-            <div class="p-5 rounded-xl bg-gray-900 border border-gray-800 hover:border-blue-500/50 transition-all duration-300">
-                <div class="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400 mb-4">
-                    <i class="bi bi-file-earmark-code text-xl"></i>
-                </div>
-                <h4 class="text-base font-bold text-white mb-2">Software & Systems Developer</h4>
-                <p class="text-xs text-gray-400 leading-relaxed">Develop low-level software drivers, system utilities, web platforms, and automated logic control pipelines.</p>
-            </div>
+                    <div onclick="launchPong()" class="p-4 bg-gray-950 border-2 border-cyan-500/60 hover:border-cyan-400 rounded-xl cursor-pointer transition-all hover:scale-102 group">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-arcade text-lg">
+                                02
+                            </div>
+                            <div>
+                                <h3 class="font-arcade text-sm text-cyan-400 group-hover:underline">NEON PONG</h3>
+                                <p class="text-[11px] text-gray-400 font-mono">Real-time collision physics simulator.</p>
+                            </div>
+                        </div>
+                    </div>
 
+                    <div onclick="launchBinaryGame()" class="p-4 bg-gray-950 border-2 border-fuchsia-500/60 hover:border-fuchsia-400 rounded-xl cursor-pointer transition-all hover:scale-102 group">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded bg-fuchsia-500/20 text-fuchsia-400 flex items-center justify-center font-arcade text-lg">
+                                03
+                            </div>
+                            <div>
+                                <h3 class="font-arcade text-sm text-fuchsia-400 group-hover:underline">BINARY SPEED ENGINE</h3>
+                                <p class="text-[11px] text-gray-400 font-mono">Binary & Hexadecimal speed conversion engine.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Display Screen Container -->
+                <div class="lg:col-span-8 flex flex-col items-center justify-center bg-black rounded-xl border-4 border-gray-800 p-4 relative min-h-[360px]">
+                    <div id="arcade-screen-title" class="text-rose-400 font-arcade text-xs mb-3">SELECT A GAME TO START</div>
+                    
+                    <!-- Canvas Display for Canvas Games (Snake/Pong) -->
+                    <canvas id="arcadeCanvas" width="400" height="300" class="bg-black border border-rose-900/50 rounded shadow-inner"></canvas>
+                    
+                    <!-- HTML Interactive Engine Display for Binary/Hex Engine -->
+                    <div id="binary-engine-container" class="w-full hidden">
+                        <!-- Mode Selection Pills -->
+                        <div class="d-flex flex-wrap justify-content-center gap-2 mb-3">
+                            <button class="mode-pill active" onclick="setMode('bin2dec', this)">Binary &rarr; Dec</button>
+                            <button class="mode-pill" onclick="setMode('dec2bin', this)">Dec &rarr; Binary</button>
+                            <button class="mode-pill" onclick="setMode('hex2dec', this)">Hex &rarr; Dec</button>
+                            <button class="mode-pill" onclick="setMode('dec2hex', this)">Dec &rarr; Hex</button>
+                        </div>
+
+                        <!-- Time Bar Progress -->
+                        <div class="timer-bar-track mb-3">
+                            <div id="timer-bar" class="timer-bar-fill" style="width: 100%;"></div>
+                        </div>
+
+                        <!-- Conversion Interactive Area -->
+                        <div class="position-relative text-center py-2">
+                            <!-- Game Over Overlay Modal -->
+                            <div id="game-over-panel" class="game-over-panel p-4 position-absolute top-50 start-50 translate-middle w-100" style="display: none; z-index: 20; max-width: 360px;">
+                                <h4 class="text-danger fw-bold mb-2"><i class="bi bi-exclamation-octagon me-2"></i>SESSION ENDED</h4>
+                                <p class="text-light mb-1 text-sm">Final Score: <span id="final-score" class="text-info fw-bold">0</span></p>
+                                <p class="text-light mb-3 text-sm">Best Streak: <span id="final-streak" class="text-warning fw-bold">0</span></p>
+                                <button class="btn-cyber w-100" onclick="startBinaryGame()">TRY AGAIN</button>
+                            </div>
+
+                            <div class="text-uppercase text-cyan-400 text-xs fw-bold tracking-widest mb-1" id="mode-label">CONVERT BINARY TO DECIMAL</div>
+                            <div class="game-display my-1" id="target-value">10101100</div>
+                            <div class="text-gray-400 text-[11px] font-monospace mb-2" id="mode-hint">Supports both 8-bit padded (00001010) and unpadded (1010) inputs</div>
+
+                            <!-- Smart Warning Alert Banner -->
+                            <div id="format-warning" class="alert alert-warning py-1 px-2 text-xs font-monospace mx-auto mb-2 align-items-center justify-content-center gap-2" style="display: none; max-width: 450px; border-radius: 8px; background: rgba(234, 179, 8, 0.15); border: 1px solid rgba(234, 179, 8, 0.4); color: #fef08a;">
+                                <i class="bi bi-exclamation-triangle-fill text-warning"></i>
+                                <span id="warning-text">Note: You are in Dec &rarr; Hex mode! Enter hex (0-9, A-F), not binary.</span>
+                            </div>
+
+                            <div class="row justify-content-center">
+                                <div class="col-12 col-md-10 col-lg-8">
+                                    <input 
+                                        type="text" 
+                                        id="user-input" 
+                                        class="game-input text-center" 
+                                        placeholder="TYPE ANSWER..." 
+                                        autocomplete="off"
+                                        oninput="validateLiveInput()"
+                                        onkeydown="if(event.key === 'Enter') checkAnswer()"
+                                    />
+                                    <div class="text-gray-400 font-monospace mt-1 text-[11px]" id="expected-format-tip">
+                                        Format tip: Enter decimal numbers (e.g., 14)
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Binary Weights Visual Helper -->
+                            <div id="bit-helper" class="bit-chart">
+                                <span class="bit-box">128</span>
+                                <span class="bit-box">64</span>
+                                <span class="bit-box">32</span>
+                                <span class="bit-box">16</span>
+                                <span class="bit-box">8</span>
+                                <span class="bit-box">4</span>
+                                <span class="bit-box">2</span>
+                                <span class="bit-box">1</span>
+                            </div>
+                        </div>
+
+                        <!-- Dashboard Stats Tiles -->
+                        <div class="row g-2 mt-2">
+                            <div class="col-3">
+                                <div class="stat-tile text-center">
+                                    <div class="stat-label">SCORE</div>
+                                    <div class="stat-value accent" id="score-val">0</div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="stat-tile text-center">
+                                    <div class="stat-label">STREAK <i class="bi bi-fire streak-flame"></i></div>
+                                    <div class="stat-value success" id="streak-val">0</div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="stat-tile text-center">
+                                    <div class="stat-label">TIME LEFT</div>
+                                    <div class="stat-value danger" id="time-val">30s</div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="stat-tile text-center">
+                                    <div class="stat-label">ACCURACY</div>
+                                    <div class="stat-value text-light" id="acc-val">100%</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="d-flex justify-content-center gap-2 mt-3">
+                            <button class="btn-cyber" onclick="checkAnswer()">SUBMIT ANSWER</button>
+                            <button class="btn-ghost" onclick="startBinaryGame()">RESET GAME</button>
+                            <button id="sound-toggle" class="btn-ghost px-3" onclick="toggleAudio()" title="Toggle Sound">
+                                <i class="bi bi-volume-up-fill" id="sound-icon"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="arcade-controls" class="mt-3 text-center text-xs font-mono text-gray-400">
+                        Use Arrow Keys to control games.
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</section>
 
-<!-- Toolstack Section -->
-<section class="py-12 border-t border-gray-800/60 bg-gray-950">
-    <div class="container-lg">
-        <div class="text-center mb-8">
-            <span class="text-xs font-bold text-blue-400 uppercase tracking-widest">Industry Tools</span>
-            <h3 class="text-2xl font-bold text-white mt-1">Tools & Platforms We Master</h3>
-            <p class="text-xs text-gray-400 mt-1">Software and simulation environments used in our academic modules.</p>
+    <!-- TOOLSTACK SECTION -->
+    <section class="py-12 border-t border-gray-800/60 bg-gray-950">
+        <div class="container-lg">
+            <div class="text-center mb-8">
+                <span class="text-xs font-bold text-cyan-400 uppercase tracking-widest">Industry Tools</span>
+                <h3 class="text-2xl font-bold text-white mt-1">Tools & Platforms We Master</h3>
+                <p class="text-xs text-gray-400 mt-1">Software and simulation environments used in our academic modules.</p>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-3 max-w-4xl mx-auto">
+                <span class="px-3 py-1.5 rounded-lg bg-gray-900 border border-gray-800 text-xs font-medium text-gray-300 flex items-center gap-2">
+                    <i class="bi bi-cpu text-cyan-400"></i> Arduino IDE / ESP32
+                </span>
+                <span class="px-3 py-1.5 rounded-lg bg-gray-900 border border-gray-800 text-xs font-medium text-gray-300 flex items-center gap-2">
+                    <i class="bi bi-diagram-3 text-cyan-400"></i> Cisco Packet Tracer
+                </span>
+                <span class="px-3 py-1.5 rounded-lg bg-gray-900 border border-gray-800 text-xs font-medium text-gray-300 flex items-center gap-2">
+                    <i class="bi bi-terminal text-cyan-400"></i> Proteus 8 Professional
+                </span>
+                <span class="px-3 py-1.5 rounded-lg bg-gray-900 border border-gray-800 text-xs font-medium text-gray-300 flex items-center gap-2">
+                    <i class="bi bi-code-square text-cyan-400"></i> VS Code & C/C++
+                </span>
+                <span class="px-3 py-1.5 rounded-lg bg-gray-900 border border-gray-800 text-xs font-medium text-gray-300 flex items-center gap-2">
+                    <i class="bi bi-git text-cyan-400"></i> Git & GitHub Pages
+                </span>
+            </div>
         </div>
+    </section>
 
-        <div class="flex flex-wrap justify-center gap-3 max-w-4xl mx-auto">
-            <span class="px-3 py-1.5 rounded-lg bg-gray-900 border border-gray-800 text-xs font-medium text-gray-300 flex items-center gap-2">
-                <i class="bi bi-cpu text-blue-400"></i> Arduino IDE / ESP32
-            </span>
-            <span class="px-3 py-1.5 rounded-lg bg-gray-900 border border-gray-800 text-xs font-medium text-gray-300 flex items-center gap-2">
-                <i class="bi bi-diagram-3 text-blue-400"></i> Cisco Packet Tracer
-            </span>
-            <span class="px-3 py-1.5 rounded-lg bg-gray-900 border border-gray-800 text-xs font-medium text-gray-300 flex items-center gap-2">
-                <i class="bi bi-terminal text-blue-400"></i> Proteus 8 Professional
-            </span>
-            <span class="px-3 py-1.5 rounded-lg bg-gray-900 border border-gray-800 text-xs font-medium text-gray-300 flex items-center gap-2">
-                <i class="bi bi-code-square text-blue-400"></i> VS Code & C/C++
-            </span>
-            <span class="px-3 py-1.5 rounded-lg bg-gray-900 border border-gray-800 text-xs font-medium text-gray-300 flex items-center gap-2">
-                <i class="bi bi-git text-blue-400"></i> Git & GitHub Pages
-            </span>
-            <span class="px-3 py-1.5 rounded-lg bg-gray-900 border border-gray-800 text-xs font-medium text-gray-300 flex items-center gap-2">
-                <i class="bi bi-box text-blue-400"></i> Oracle VirtualBox & Linux
-            </span>
-        </div>
-    </div>
-</section>
-
-    
-
-    <!-- Footer -->
+    <!-- FOOTER -->
     <footer class="bg-dark text-light pt-5 pb-4 mt-5">
         <div class="container-lg">
             <div class="row g-4 mb-4">
                 <div class="col-lg-4 col-md-6">
                     <div class="d-flex align-items-center gap-2 mb-3">
-                        <span class="badge bg-primary fs-6">CPE</span>
+                        <span class="badge bg-info text-dark fs-6">CPE</span>
                         <span class="fw-bold fs-5 text-white">WEB PORTAL</span>
                     </div>
                     <p class="text-secondary small mb-3">Center for Computer Engineering Research and System Development. Driving innovation through hardware & software integration.</p>
@@ -393,7 +911,6 @@
                     <ul class="list-unstyled text-secondary small d-grid gap-2">
                         <li><a href="#" class="text-decoration-none text-secondary">API Reference</a></li>
                         <li><a href="#" class="text-decoration-none text-secondary">Hardware SDK</a></li>
-                        <li><a href="#" class="text-decoration-none text-secondary">Community Forum</a></li>
                     </ul>
                 </div>
 
@@ -401,8 +918,8 @@
                     <h6 class="fw-bold text-white mb-3">Subscribe to Technical Updates</h6>
                     <p class="text-secondary small">Receive weekly digests on system updates and lab releases.</p>
                     <div class="input-group mb-3">
-                        <input type="email" class="form-control bg-secondary bg-opacity-10 border-secondary text-white" placeholder="Enter your email" aria-label="Subscriber Email">
-                        <button class="btn btn-primary" type="button">Subscribe</button>
+                        <input type="email" class="form-control bg-secondary bg-opacity-10 border-secondary text-white" placeholder="Enter your email">
+                        <button class="btn btn-info" type="button">Subscribe</button>
                     </div>
                 </div>
             </div>
@@ -411,46 +928,434 @@
 
             <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center text-secondary small">
                 <p class="mb-2 mb-sm-0">&copy; 2026 CPE Web Portal. All rights reserved.</p>
-                <div class="d-flex gap-3">
-                    <a href="#" class="text-decoration-none text-secondary">Privacy Policy</a>
-                    <a href="#" class="text-decoration-none text-secondary">Terms of Service</a>
-                </div>
             </div>
         </div>
-
     </footer>
 
     <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Custom Interactivity Script -->
+    <!-- Custom Interactivity Scripts -->
     <script>
+        // View Switching Logic
+        function showArcadeView() {
+            document.getElementById('portal-view').classList.add('hidden');
+            document.getElementById('arcade-view').classList.remove('hidden');
+            launchSnake(); // Default game on open
+        }
+
+        function showPortalView() {
+            document.getElementById('arcade-view').classList.add('hidden');
+            document.getElementById('portal-view').classList.remove('hidden');
+            if (activeGameInterval) clearInterval(activeGameInterval);
+            if (binaryTimerId) clearInterval(binaryTimerId);
+        }
+
+        let activeGameInterval = null;
+        let binaryTimerId = null;
+
+        // Arcade Games
+        const canvas = document.getElementById('arcadeCanvas');
+        const ctx = canvas ? canvas.getContext('2d') : null;
+
+        function launchSnake() {
+            if (activeGameInterval) clearInterval(activeGameInterval);
+            if (binaryTimerId) clearInterval(binaryTimerId);
+            
+            document.getElementById('arcadeCanvas').classList.remove('hidden');
+            document.getElementById('binary-engine-container').classList.add('hidden');
+            
+            document.getElementById('arcade-screen-title').innerText = 'GAME ACTIVE: CYBER SNAKE';
+            document.getElementById('arcade-controls').innerText = 'Use Arrow Keys to control direction.';
+            
+            let snake = [{x: 10, y: 10}];
+            let food = {x: 15, y: 15};
+            let dx = 1, dy = 0;
+            const gridSize = 15;
+            const tileCount = 20;
+
+            document.onkeydown = function(e) {
+                if (e.key === 'ArrowUp' && dy === 0) { dx = 0; dy = -1; }
+                if (e.key === 'ArrowDown' && dy === 0) { dx = 0; dy = 1; }
+                if (e.key === 'ArrowLeft' && dx === 0) { dx = -1; dy = 0; }
+                if (e.key === 'ArrowRight' && dx === 0) { dx = 1; dy = 0; }
+            };
+
+            activeGameInterval = setInterval(() => {
+                let head = {x: snake[0].x + dx, y: snake[0].y + dy};
+                
+                if (head.x < 0) head.x = tileCount - 1;
+                if (head.x >= tileCount) head.x = 0;
+                if (head.y < 0) head.y = tileCount - 1;
+                if (head.y >= tileCount) head.y = 0;
+
+                snake.unshift(head);
+
+                if (head.x === food.x && head.y === food.y) {
+                    food = {x: Math.floor(Math.random() * tileCount), y: Math.floor(Math.random() * tileCount)};
+                } else {
+                    snake.pop();
+                }
+
+                ctx.fillStyle = 'black';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = '#10b981';
+                snake.forEach(part => ctx.fillRect(part.x * gridSize, part.y * gridSize, gridSize - 2, gridSize - 2));
+
+                ctx.fillStyle = '#f43f5e';
+                ctx.fillRect(food.x * gridSize, food.y * gridSize, gridSize - 2, gridSize - 2);
+            }, 100);
+        }
+
+        function launchPong() {
+            if (activeGameInterval) clearInterval(activeGameInterval);
+            if (binaryTimerId) clearInterval(binaryTimerId);
+
+            document.getElementById('arcadeCanvas').classList.remove('hidden');
+            document.getElementById('binary-engine-container').classList.add('hidden');
+
+            document.getElementById('arcade-screen-title').innerText = 'GAME ACTIVE: NEON PONG';
+            document.getElementById('arcade-controls').innerText = 'Use Up and Down Arrow Keys to move paddle.';
+
+            let ballX = 200, ballY = 150, ballSpeedX = 3, ballSpeedY = 2;
+            let paddleY = 120;
+
+            document.onkeydown = function(e) {
+                if (e.key === 'ArrowUp' && paddleY > 0) paddleY -= 20;
+                if (e.key === 'ArrowDown' && paddleY < canvas.height - 60) paddleY += 20;
+            };
+
+            activeGameInterval = setInterval(() => {
+                ballX += ballSpeedX;
+                ballY += ballSpeedY;
+
+                if (ballY <= 0 || ballY >= canvas.height) ballSpeedY = -ballSpeedY;
+                if (ballX >= canvas.width) ballSpeedX = -ballSpeedX;
+
+                if (ballX <= 15 && ballY >= paddleY && ballY <= paddleY + 60) {
+                    ballSpeedX = -ballSpeedX;
+                }
+
+                if (ballX < 0) {
+                    ballX = 200; ballY = 150;
+                }
+
+                ctx.fillStyle = 'black';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = '#06b6d4';
+                ctx.fillRect(5, paddleY, 10, 60);
+
+                ctx.fillStyle = '#f43f5e';
+                ctx.beginPath();
+                ctx.arc(ballX, ballY, 6, 0, Math.PI * 2);
+                ctx.fill();
+            }, 1000 / 60);
+        }
+
+        /* BINARY & HEXADECIMAL SPEED ENGINE */
+        let audioEnabled = true;
+        let audioCtx = null;
+
+        function playSound(type) {
+            if (!audioEnabled) return;
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                const now = audioCtx.currentTime;
+                if (type === 'correct') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(587.33, now); // D5
+                    osc.frequency.exponentialRampToValueAtTime(880, now + 0.15); // A5
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+                    osc.start(now);
+                    osc.stop(now + 0.2);
+                } else if (type === 'wrong') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(180, now);
+                    osc.frequency.exponentialRampToValueAtTime(110, now + 0.2);
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+                    osc.start(now);
+                    osc.stop(now + 0.25);
+                }
+            } catch (e) {}
+        }
+
+        function toggleAudio() {
+            audioEnabled = !audioEnabled;
+            const icon = document.getElementById('sound-icon');
+            icon.className = audioEnabled ? 'bi bi-volume-up-fill' : 'bi bi-volume-mute-fill';
+        }
+
+        let currentMode = 'bin2dec';
+        let targetValDec = 0;
+        let score = 0;
+        let streak = 0;
+        let maxStreak = 0;
+        let totalAttempts = 0;
+        let correctAttempts = 0;
+        let timeLeft = 30;
+
+        function launchBinaryGame() {
+            if (activeGameInterval) clearInterval(activeGameInterval);
+            if (binaryTimerId) clearInterval(binaryTimerId);
+
+            document.getElementById('arcadeCanvas').classList.add('hidden');
+            document.getElementById('binary-engine-container').classList.remove('hidden');
+
+            document.getElementById('arcade-screen-title').innerText = 'GAME ACTIVE: BINARY & HEX ENGINE';
+            document.getElementById('arcade-controls').innerText = 'Type answer into input field & press Enter or Submit.';
+
+            document.onkeydown = null; // Unbind global canvas key handlers
+            startBinaryGame();
+        }
+
+        function setMode(mode, btn) {
+            currentMode = mode;
+            document.querySelectorAll('.mode-pill').forEach(p => p.classList.remove('active'));
+            btn.classList.add('active');
+
+            const labels = {
+                'bin2dec': { 
+                    label: 'CONVERT BINARY TO DECIMAL', 
+                    hint: 'Enter the decimal equivalent', 
+                    tip: 'Format tip: Decimal numbers (e.g., 14)' 
+                },
+                'dec2bin': { 
+                    label: 'CONVERT DECIMAL TO BINARY', 
+                    hint: 'Enter binary digits (0 and 1)', 
+                    tip: 'Format tip: Accepts 8-bit (00001110) or short (1110)' 
+                },
+                'hex2dec': { 
+                    label: 'CONVERT HEX TO DECIMAL', 
+                    hint: 'Enter the decimal equivalent', 
+                    tip: 'Format tip: Decimal numbers (e.g., 14)' 
+                },
+                'dec2hex': { 
+                    label: 'CONVERT DECIMAL TO HEX', 
+                    hint: 'Enter hexadecimal digits (0-9, A-F)', 
+                    tip: 'Format tip: Hexadecimal (e.g., E, 0xE, or 0E)' 
+                }
+            };
+
+            document.getElementById('mode-label').textContent = labels[mode].label;
+            document.getElementById('mode-hint').textContent = labels[mode].hint;
+            document.getElementById('expected-format-tip').textContent = labels[mode].tip;
+            
+            const bitHelper = document.getElementById('bit-helper');
+            if (mode === 'bin2dec' || mode === 'dec2bin') {
+                bitHelper.style.display = 'flex';
+            } else {
+                bitHelper.style.display = 'none';
+            }
+
+            hideWarning();
+            generateQuestion();
+        }
+
+        function generateQuestion() {
+            targetValDec = Math.floor(Math.random() * 255) + 1;
+            const displayEl = document.getElementById('target-value');
+
+            if (currentMode === 'bin2dec') {
+                displayEl.textContent = targetValDec.toString(2).padStart(8, '0');
+            } else if (currentMode === 'dec2bin') {
+                displayEl.textContent = targetValDec.toString(10);
+            } else if (currentMode === 'hex2dec') {
+                displayEl.textContent = "0x" + targetValDec.toString(16).toUpperCase();
+            } else if (currentMode === 'dec2hex') {
+                displayEl.textContent = targetValDec.toString(10);
+            }
+
+            const input = document.getElementById('user-input');
+            input.value = '';
+            hideWarning();
+            input.focus();
+        }
+
+        function hideWarning() {
+            const warnBox = document.getElementById('format-warning');
+            warnBox.style.display = 'none';
+        }
+
+        function showWarning(msg) {
+            const warnBox = document.getElementById('format-warning');
+            const warnText = document.getElementById('warning-text');
+            warnText.innerHTML = msg;
+            warnBox.style.display = 'inline-flex';
+        }
+
+        function validateLiveInput() {
+            const inputEl = document.getElementById('user-input');
+            const val = inputEl.value.trim().toUpperCase();
+
+            if (!val) {
+                hideWarning();
+                return;
+            }
+
+            if (currentMode === 'dec2hex') {
+                const isOnlyBinaryChars = /^[01]+$/.test(val);
+                const expectedHex = targetValDec.toString(16).toUpperCase();
+                if (isOnlyBinaryChars && val.length >= 3 && val !== expectedHex) {
+                    showWarning(`Note: You are in <strong>Dec &rarr; Hex</strong> mode! Enter hex (e.g., <strong>${expectedHex}</strong> or <strong>0x${expectedHex}</strong>), not binary.`);
+                    return;
+                }
+            }
+
+            if (currentMode === 'bin2dec' || currentMode === 'hex2dec') {
+                if (/[A-F]/.test(val)) {
+                    showWarning(`Note: Expecting a <strong>decimal number</strong> (0-9), not letters.`);
+                    return;
+                }
+            }
+
+            if (currentMode === 'dec2bin') {
+                if (/[2-9A-Z]/.test(val)) {
+                    showWarning(`Note: You are in <strong>Dec &rarr; Binary</strong> mode! Only use <strong>0</strong> and <strong>1</strong>.`);
+                    return;
+                }
+            }
+
+            hideWarning();
+        }
+
+        function checkAnswer() {
+            const inputEl = document.getElementById('user-input');
+            const rawVal = inputEl.value.trim().toUpperCase();
+            if (!rawVal) return;
+
+            let isCorrect = false;
+
+            if (currentMode === 'bin2dec') {
+                const parsed = parseInt(rawVal, 10);
+                isCorrect = !isNaN(parsed) && parsed === targetValDec;
+            } else if (currentMode === 'dec2bin') {
+                const cleanedBinary = rawVal.replace(/[^01]/g, '');
+                if (cleanedBinary.length > 0) {
+                    const parsedBinVal = parseInt(cleanedBinary, 2);
+                    isCorrect = parsedBinVal === targetValDec;
+                }
+            } else if (currentMode === 'hex2dec') {
+                const parsed = parseInt(rawVal, 10);
+                isCorrect = !isNaN(parsed) && parsed === targetValDec;
+            } else if (currentMode === 'dec2hex') {
+                let cleanedHex = rawVal.replace(/^0X/, '');
+                cleanedHex = cleanedHex.replace(/^0+/, '');
+                let targetHex = targetValDec.toString(16).toUpperCase();
+                
+                if (cleanedHex === '') cleanedHex = '0';
+                isCorrect = cleanedHex === targetHex;
+            }
+
+            totalAttempts++;
+
+            if (isCorrect) {
+                playSound('correct');
+                correctAttempts++;
+                score += 100 + (streak * 20);
+                streak++;
+                if (streak > maxStreak) maxStreak = streak;
+                timeLeft = Math.min(30, timeLeft + 3);
+
+                inputEl.classList.add('flash-correct');
+                setTimeout(() => inputEl.classList.remove('flash-correct'), 400);
+                generateQuestion();
+            } else {
+                playSound('wrong');
+                streak = 0;
+                inputEl.classList.add('flash-wrong');
+                setTimeout(() => inputEl.classList.remove('flash-wrong'), 400);
+            }
+
+            updateStats();
+        }
+
+        function updateStats() {
+            document.getElementById('score-val').textContent = score;
+            document.getElementById('streak-val').textContent = streak;
+            document.getElementById('time-val').textContent = timeLeft + 's';
+            
+            const acc = totalAttempts > 0 ? Math.round((correctAttempts / totalAttempts) * 100) : 100;
+            document.getElementById('acc-val').textContent = acc + '%';
+
+            const timerBar = document.getElementById('timer-bar');
+            timerBar.style.width = (timeLeft / 30 * 100) + '%';
+        }
+
+        function startBinaryGame() {
+            score = 0;
+            streak = 0;
+            maxStreak = 0;
+            totalAttempts = 0;
+            correctAttempts = 0;
+            timeLeft = 30;
+
+            document.getElementById('game-over-panel').style.display = 'none';
+            updateStats();
+            generateQuestion();
+
+            if (binaryTimerId) clearInterval(binaryTimerId);
+            binaryTimerId = setInterval(() => {
+                timeLeft--;
+                updateStats();
+                if (timeLeft <= 0) {
+                    clearInterval(binaryTimerId);
+                    endBinaryGame();
+                }
+            }, 1000);
+        }
+
+        function endBinaryGame() {
+            document.getElementById('final-score').textContent = score;
+            document.getElementById('final-streak').textContent = maxStreak;
+            document.getElementById('game-over-panel').style.display = 'block';
+        }
+
+        // Loader Screen Script
         document.addEventListener('DOMContentLoaded', function() {
-            const heroCarouselEl = document.getElementById('heroCarousel');
-            if (heroCarouselEl) {
-                const carouselInstance = new bootstrap.Carousel(heroCarouselEl, {
-                    interval: 5000,
-                    pause: 'hover',
-                    wrap: true
-                });
+            const loader = document.getElementById('cpe-loader');
+            const loaderBar = document.getElementById('loader-bar');
+            const loaderStatus = document.getElementById('loader-status');
 
-                const pauseBtn = document.getElementById('pauseCarouselBtn');
-                const pauseIcon = document.getElementById('pauseIcon');
-                let isPlaying = true;
+            const statusSteps = [
+                { progress: '25%', text: 'SCANNING HARDWARE PORT PROTOCOLS...' },
+                { progress: '50%', text: 'FETCHING NETWORK TOPOLOGY...' },
+                { progress: '75%', text: 'AUTHENTICATING ENCRYPTED KEYS...' },
+                { progress: '100%', text: 'ACCESS GRANTED. WELCOME TO CPE PORTAL.' }
+            ];
 
-                if (pauseBtn && pauseIcon) {
-                    pauseBtn.addEventListener('click', function() {
-                        if (isPlaying) {
-                            carouselInstance.pause();
-                            pauseIcon.className = 'bi bi-play-fill';
-                            pauseBtn.childNodes[1].nodeValue = ' Resume';
-                        } else {
-                            carouselInstance.cycle();
-                            pauseIcon.className = 'bi bi-pause-fill';
-                            pauseBtn.childNodes[1].nodeValue = ' Pause';
-                        }
-                        isPlaying = !isPlaying;
-                    });
+            let step = 0;
+            const interval = setInterval(() => {
+                if (step < statusSteps.length) {
+                    loaderBar.style.width = statusSteps[step].progress;
+                    loaderStatus.innerText = statusSteps[step].text;
+                    step++;
+                } else {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        loader.classList.add('hidden-loader');
+                        startTypewriter();
+                    }, 500);
+                }
+            }, 300);
+
+            const textToType = "Welcome to the official CPE Web Portal. Architecting embedded microprocessors, IoT network infrastructure, and real-time computing systems.";
+            const typewriterEl = document.getElementById('typewriter-text');
+            let charIdx = 0;
+
+            function startTypewriter() {
+                if (typewriterEl && charIdx < textToType.length) {
+                    typewriterEl.textContent += textToType.charAt(charIdx);
+                    charIdx++;
+                    setTimeout(startTypewriter, 25);
                 }
             }
         });
