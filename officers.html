@@ -5,231 +5,341 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CPE Web Portal - Executive Officers</title>
 
-    <!-- Tailwind CSS, Bootstrap 5, Bootstrap Icons & Custom CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Press+Start+2P&family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+
+    <style>
+        body {
+            font-family: 'Fira Code', monospace;
+        }
+
+        .scanline-bg {
+            background: linear-gradient(
+                to bottom,
+                rgba(255,255,255,0),
+                rgba(255,255,255,0) 50%,
+                rgba(0, 0, 0, 0.3) 50%,
+                rgba(0, 0, 0, 0.3)
+            );
+            background-size: 100% 4px;
+        }
+
+        #cpe-loader {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background-color: #030712;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        #cpe-loader.hidden-loader {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .radar-sweep {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            border: 2px solid rgba(6, 182, 212, 0.4);
+            position: relative;
+            background: radial-gradient(circle, rgba(6,182,212,0.1) 0%, rgba(0,0,0,0.8) 70%);
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+        }
+
+        .radar-sweep::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 50%;
+            height: 50%;
+            background: linear-gradient(45deg, rgba(6, 182, 212, 0.8), transparent);
+            transform-origin: 0% 0%;
+            border-radius: 100% 0 0 0;
+            animation: sweep 2s linear infinite;
+        }
+
+        @keyframes sweep {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 
-<body class="bg-gray-950 text-gray-100 min-h-screen flex flex-col justify-between">
+<body class="bg-gray-950 text-gray-100 min-h-screen flex flex-col justify-between scanline-bg">
+
+    <!-- WAITING SCAN (CPE LOADER SCREEN) -->
+    <div id="cpe-loader">
+        <div class="relative flex flex-col items-center">
+            <div class="radar-sweep mb-6 flex items-center justify-center">
+                <span class="text-cyan-400 font-bold text-xl tracking-widest z-10 animate-pulse">CPE</span>
+            </div>
+            <div class="text-cyan-400 font-mono text-sm tracking-widest uppercase mb-2 flex items-center gap-2">
+                <span class="inline-block w-2 h-2 bg-cyan-400 rounded-full animate-ping"></span>
+                <span>SYSTEM SCAN IN PROGRESS...</span>
+            </div>
+            <div id="loader-status" class="text-gray-400 text-xs font-mono h-5">FETCHING OFFICERS DIRECTORY...</div>
+            <div class="w-64 bg-gray-900 border border-cyan-900/50 h-2 rounded-full mt-4 overflow-hidden p-0.5">
+                <div id="loader-bar" class="bg-cyan-500 h-full w-0 transition-all duration-300 shadow-[0_0_10px_#06b6d4]"></div>
+            </div>
+        </div>
+    </div>
 
     <!-- Header / Navigation -->
-    <header class="bg-gray-900 border-b border-gray-800 sticky top-0 z-50">
+    <header class="bg-gray-900/90 border-b border-gray-800 sticky top-0 z-50 backdrop-blur-md">
         <div class="container-lg py-3 flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <div class="m2-container">
                     <div class="logo">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="fill-cyan-400 w-6 h-6">
                             <path d="M20 3H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h6l-2 3v1h8v-1l-2-3h6c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 12H4V5h16v10z"/>
                         </svg>
-                        <span>SCPES</span>
+                        <span class="text-cyan-400 font-bold">SCPES</span>
                     </div>
                 </div>
                 <div class="flex flex-col">
-                    <span class="font-bold text-lg text-white leading-tight">CPE WEB PORTAL</span>
-                    <span class="text-blue-400 text-[10px] uppercase tracking-wider font-semibold">Society of Computer Engineering</span>
+                    <span class="font-bold text-lg text-white leading-tight tracking-wider">CPE WEB PORTAL</span>
+                    <span class="text-cyan-400 text-[10px] uppercase tracking-wider font-semibold">Society of Computer Engineering</span>
                 </div>
             </div>
 
-            <nav class="hidden md:flex gap-6 text-sm font-medium text-gray-300">
-                <a href="index.html" class="hover:text-blue-400 transition-colors">Home</a>
-                <a href="officers.html" class="text-blue-400 font-semibold">Officers & Faculty</a>
-                <a href="faq.html" class="hover:text-blue-400 transition-colors">FAQ's</a>
-                <button onclick="showArcadeView()" class="px-3 py-1 bg-gradient-to-r from-rose-600 to-fuchsia-600 hover:from-rose-500 hover:to-fuchsia-500 text-white font-bold text-xs uppercase tracking-wider rounded-lg shadow-[0_0_12px_rgba(244,63,94,0.6)] flex items-center gap-2 transition-all transform hover:scale-105">
-                    <i class="bi bi-controller text-base"></i> ARCADE </button>
+            <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-gray-300">
+                <a href="index.html" class="hover:text-cyan-400 transition-colors nav-trigger">Home</a>
+                <a href="officers.html" class="text-cyan-400 font-semibold nav-trigger">Officers & Faculty</a>
+                <a href="faq.html" class="hover:text-cyan-400 transition-colors nav-trigger">FAQ's</a>
+                <a href="index.html?arcade=true" class="px-3 py-1 bg-gradient-to-r from-rose-600 to-fuchsia-600 hover:from-rose-500 hover:to-fuchsia-500 text-white font-bold text-xs uppercase tracking-wider rounded-lg shadow-[0_0_12px_rgba(244,63,94,0.6)] flex items-center gap-2 transition-all transform hover:scale-105">
+                    <i class="bi bi-controller text-base"></i> ARCADE </a>
             </nav>
         </div>
     </header>
 
     <!-- Main Content Section -->
     <main class="py-10 container-lg flex-grow">
-        
-        <div class="mb-2">
-            <a href="index.html" class="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-blue-400 transition-colors">
+        <div class="mb-4">
+            <a href="index.html" class="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-cyan-400 transition-colors nav-trigger">
                 <i class="bi bi-arrow-left"></i>
                 <span>Back to Home</span>
             </a>
         </div>
 
-           <div class="text-center mb-8">
+        <div class="text-center mb-8">
             <h2 class="text-2xl md:text-3xl font-extrabold text-white tracking-tight">Faculty Advisors</h2>
-            <p class="text-sm text-gray-400 mt-1">Leading the Computer Engineering Student </p>
+            <p class="text-sm text-gray-400 mt-1">Leading the Computer Engineering Department</p>
         </div>
- <div class="flex flex-wrap gap-4 justify-center items-center">
 
-            
-            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
-                <img src="assets/sir_errol.png" alt="President" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=President'" />
+        <div class="flex flex-wrap gap-4 justify-center items-center">
+            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0 hover:border-cyan-500/50">
+                <img src="assets/sir_errol.png" alt="President" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Faculty'" />
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
-                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5">CPE Dept. Chair</span>
+                    <span class="text-[10px] font-semibold text-cyan-400 uppercase tracking-wider mb-0.5">CPE Dept. Chair</span>
                     <h3 class="text-xs font-bold text-white leading-tight drop-shadow">Engr. Errol John Antonio</h3>
                 </div>
             </div>
 
-           
-            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
-                <img src="assets/maam_limkian.png" alt="VP For Internal Affairs" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
+            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0 hover:border-cyan-500/50">
+                <img src="assets/maam_limkian.png" alt="Faculty" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Faculty'" />
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
-                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5"></span>
+                    <span class="text-[10px] font-semibold text-cyan-400 uppercase tracking-wider mb-0.5">Faculty Advisor</span>
                     <h3 class="text-xs font-bold text-white leading-tight drop-shadow">Engr. Mary Ann Limkian</h3>
                 </div>
             </div>
 
-            
-            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
-                <img src="assets/sir_onofre.png" alt="VP For External Affairs" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
+            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0 hover:border-cyan-500/50">
+                <img src="assets/sir_onofre.png" alt="Faculty" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Faculty'" />
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
-                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5"></span>
-                    <h3 class="text-xs font-bold text-white leading-tight drop-shadow">Engr. Onofre Corpuz </h3>
+                    <span class="text-[10px] font-semibold text-cyan-400 uppercase tracking-wider mb-0.5">Faculty Advisor</span>
+                    <h3 class="text-xs font-bold text-white leading-tight drop-shadow">Engr. Onofre Corpuz</h3>
                 </div>
             </div>
 
-        
-            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
-                <img src="assets/sir_joemhel.png" alt="VP For Secretariat" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
+            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0 hover:border-cyan-500/50">
+                <img src="assets/sir_joemhel.png" alt="Faculty" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Faculty'" />
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
-                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5"></span>
+                    <span class="text-[10px] font-semibold text-cyan-400 uppercase tracking-wider mb-0.5">Faculty Advisor</span>
                     <h3 class="text-xs font-bold text-white leading-tight drop-shadow">Engr. Joemhel Coral</h3>
                 </div>
             </div>
         </div>
-        <div>
-    
-        </div>
-        <div class="text-center mb-9 mt-5">
+
+        <div class="text-center mb-9 mt-10">
             <h2 class="text-2xl md:text-3xl font-extrabold text-white tracking-tight">Executive Officers</h2>
-            <p class="text-sm text-gray-400 mt-1"></p>
+            <p class="text-sm text-gray-400 mt-1">Student Leaders Driving SCPES Innovation</p>
         </div>
 
-    
         <div class="flex flex-wrap gap-4 justify-center items-center">
-
             <!-- President -->
-            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
+            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0 hover:border-cyan-500/50">
                 <img src="assets/president.jpg" alt="President" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=President'" />
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
-                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5">Executive Head</span>
+                    <span class="text-[10px] font-semibold text-cyan-400 uppercase tracking-wider mb-0.5">Executive Head</span>
                     <h3 class="text-xs font-bold text-white leading-tight drop-shadow">President</h3>
                 </div>
             </div>
 
             <!-- VP Internal -->
-            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
+            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0 hover:border-cyan-500/50">
                 <img src="assets/vpinternal.jpg" alt="VP For Internal Affairs" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
-                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5">Vice President</span>
+                    <span class="text-[10px] font-semibold text-cyan-400 uppercase tracking-wider mb-0.5">Vice President</span>
                     <h3 class="text-xs font-bold text-white leading-tight drop-shadow">VP Internal Affairs</h3>
                 </div>
             </div>
 
             <!-- VP External -->
-            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
+            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0 hover:border-cyan-500/50">
                 <img src="assets/vpexternal.jpg" alt="VP For External Affairs" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
-                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5">Vice President</span>
+                    <span class="text-[10px] font-semibold text-cyan-400 uppercase tracking-wider mb-0.5">Vice President</span>
                     <h3 class="text-xs font-bold text-white leading-tight drop-shadow">VP External Affairs</h3>
                 </div>
             </div>
 
             <!-- VP Secretariat -->
-            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
+            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0 hover:border-cyan-500/50">
                 <img src="assets/vpsec.jpg" alt="VP For Secretariat" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
-                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5">Vice President</span>
+                    <span class="text-[10px] font-semibold text-cyan-400 uppercase tracking-wider mb-0.5">Vice President</span>
                     <h3 class="text-xs font-bold text-white leading-tight drop-shadow">VP Secretariat</h3>
                 </div>
             </div>
 
             <!-- VP Business & Finance -->
-            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
+            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0 hover:border-cyan-500/50">
                 <img src="assets/vpbusiness.jpg" alt="VP For Business and Finance" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
-                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5">Vice President</span>
+                    <span class="text-[10px] font-semibold text-cyan-400 uppercase tracking-wider mb-0.5">Vice President</span>
                     <h3 class="text-xs font-bold text-white leading-tight drop-shadow">VP Business & Finance</h3>
                 </div>
             </div>
 
             <!-- VP Events -->
-            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
+            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0 hover:border-cyan-500/50">
                 <img src="assets/vpevents.jpg" alt="VP For Events and Programs" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
-                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5">Vice President</span>
+                    <span class="text-[10px] font-semibold text-cyan-400 uppercase tracking-wider mb-0.5">Vice President</span>
                     <h3 class="text-xs font-bold text-white leading-tight drop-shadow">VP Events & Programs</h3>
                 </div>
             </div>
 
             <!-- VP Career -->
-            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
+            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0 hover:border-cyan-500/50">
                 <img src="assets/vpcareer.jpg" alt="VP For Career Development" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
-                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5">Vice President</span>
+                    <span class="text-[10px] font-semibold text-cyan-400 uppercase tracking-wider mb-0.5">Vice President</span>
                     <h3 class="text-xs font-bold text-white leading-tight drop-shadow">VP Career Development</h3>
                 </div>
             </div>
 
             <!-- VP Community -->
-            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
+            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0 hover:border-cyan-500/50">
                 <img src="assets/vpcommunity.jpg" alt="VP For Community and Social Responsibility" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
-                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5">Vice President</span>
-                    <h3 class="text-xs font-bold text-white leading-tight drop-shadow">VP Community & Social Responsibility</h3>
+                    <span class="text-[10px] font-semibold text-cyan-400 uppercase tracking-wider mb-0.5">Vice President</span>
+                    <h3 class="text-xs font-bold text-white leading-tight drop-shadow">VP Community & Social</h3>
                 </div>
             </div>
 
             <!-- VP Technical -->
-            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
+            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0 hover:border-cyan-500/50">
                 <img src="assets/vptech.jpg" alt="VP For Technical Operations" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
-                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5">Vice President</span>
+                    <span class="text-[10px] font-semibold text-cyan-400 uppercase tracking-wider mb-0.5">Vice President</span>
                     <h3 class="text-xs font-bold text-white leading-tight drop-shadow">VP Technical Operations</h3>
                 </div>
             </div>
 
             <!-- VP Creatives -->
-            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
+            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0 hover:border-cyan-500/50">
                 <img src="assets/vpcreatives.jpg" alt="VP For Creatives and Communication" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
-                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5">Vice President</span>
-                    <h3 class="text-xs font-bold text-white leading-tight drop-shadow">VP Creatives & Communication</h3>
+                    <span class="text-[10px] font-semibold text-cyan-400 uppercase tracking-wider mb-0.5">Vice President</span>
+                    <h3 class="text-xs font-bold text-white leading-tight drop-shadow">VP Creatives & Comm</h3>
                 </div>
             </div>
 
             <!-- VP Media -->
-            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
+            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0 hover:border-cyan-500/50">
                 <img src="assets/vpmedia.jpg" alt="VP For Media" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
-                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5">Vice President</span>
+                    <span class="text-[10px] font-semibold text-cyan-400 uppercase tracking-wider mb-0.5">Vice President</span>
                     <h3 class="text-xs font-bold text-white leading-tight drop-shadow">VP Media</h3>
                 </div>
             </div>
 
             <!-- VP Logistics -->
-            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
+            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0 hover:border-cyan-500/50">
                 <img src="assets/vplogistics.jpg" alt="VP For Logistics and Volunteer's Coordination" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
-                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5">Vice President</span>
+                    <span class="text-[10px] font-semibold text-cyan-400 uppercase tracking-wider mb-0.5">Vice President</span>
                     <h3 class="text-xs font-bold text-white leading-tight drop-shadow">VP Logistics & Volunteers</h3>
                 </div>
             </div>
 
             <!-- VP Recreation & Wellness -->
-            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0">
+            <div class="group relative w-[160px] h-[240px] overflow-hidden rounded-xl bg-gray-900 border border-gray-800 shadow-md transition-all duration-300 hover:scale-105 shrink-0 hover:border-cyan-500/50">
                 <img src="assets/vprnw.jpg" alt="VP For Recreation and Wellness" class="h-full w-full object-cover object-top" onerror="this.src='https://via.placeholder.com/160x240?text=Officer'" />
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3">
-                    <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-0.5">Vice President</span>
+                    <span class="text-[10px] font-semibold text-cyan-400 uppercase tracking-wider mb-0.5">Vice President</span>
                     <h3 class="text-xs font-bold text-white leading-tight drop-shadow">VP Recreation & Wellness</h3>
                 </div>
             </div>
-
         </div>
     </main>
 
     <!-- Footer -->
-    <footer class="border-t border-gray-800 py-4 text-center text-xs text-gray-500">
+    <footer class="bg-gray-950 text-secondary border-t border-gray-800 py-4 text-center text-xs font-mono">
         © 2026 CPE Web Portal - Society of Computer Engineering Students. All rights reserved.
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.querySelectorAll('a.nav-trigger, a[href$=".html"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const targetUrl = this.getAttribute('href');
+                if (targetUrl && targetUrl !== '#' && !targetUrl.startsWith('http')) {
+                    e.preventDefault();
+                    const loader = document.getElementById('cpe-loader');
+                    loader.classList.remove('hidden-loader');
+                    setTimeout(() => {
+                        window.location.href = targetUrl;
+                    }, 400);
+                }
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const loader = document.getElementById('cpe-loader');
+            const loaderBar = document.getElementById('loader-bar');
+            const loaderStatus = document.getElementById('loader-status');
+
+            const statusSteps = [
+                { progress: '30%', text: 'QUERYING FACULTY RECORDS...' },
+                { progress: '65%', text: 'AUTHENTICATING OFFICERS DATA...' },
+                { progress: '100%', text: 'FACULTY & OFFICERS LOADED.' }
+            ];
+
+            let step = 0;
+            const interval = setInterval(() => {
+                if (step < statusSteps.length) {
+                    loaderBar.style.width = statusSteps[step].progress;
+                    loaderStatus.innerText = statusSteps[step].text;
+                    step++;
+                } else {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        loader.classList.add('hidden-loader');
+                    }, 350);
+                }
+            }, 250);
+        });
+    </script>
 </body>
 </html>

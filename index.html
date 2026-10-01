@@ -429,9 +429,9 @@
             </div>
 
             <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-gray-300">
-                <a href="#" onclick="showPortalView()" class="hover:text-cyan-400 transition-colors">Home</a>
-                <a href="officers.html" class="hover:text-cyan-400 transition-colors">Officers & Faculty</a>
-                <a href="faq.html" class="hover:text-cyan-400 transition-colors">FAQ's</a>
+                <a href="index.html" class="text-cyan-400 font-semibold nav-trigger">Home</a>
+                <a href="officers.html" class="hover:text-cyan-400 transition-colors nav-trigger">Officers & Faculty</a>
+                <a href="faq.html" class="hover:text-cyan-400 transition-colors nav-trigger">FAQ's</a>
                 <button onclick="showArcadeView()" class="px-3 py-1 bg-gradient-to-r from-rose-600 to-fuchsia-600 hover:from-rose-500 hover:to-fuchsia-500 text-white font-bold text-xs uppercase tracking-wider rounded-lg shadow-[0_0_12px_rgba(244,63,94,0.6)] flex items-center gap-2 transition-all transform hover:scale-105">
                     <i class="bi bi-controller text-base"></i> ARCADE </button>
             </nav>
@@ -882,7 +882,7 @@
     </section>
 
     <!-- FOOTER -->
-    <footer class="bg-dark text-light pt-5 pb-4 mt-5">
+    <footer class="bg-gray-950 text-light pt-5 pb-4 mt-5 border-t border-gray-800">
         <div class="container-lg">
             <div class="row g-4 mb-4">
                 <div class="col-lg-4 col-md-6">
@@ -896,17 +896,17 @@
                 <div class="col-lg-2 col-md-6">
                     <h6 class="fw-bold text-white mb-3">Quick Links</h6>
                     <ul class="list-unstyled text-secondary small d-grid gap-2">
-                        <li><a href="faq.html" class="text-decoration-none text-secondary">FAQ's </a></li>
-                        <li><a href="https://www.facebook.com/uescpes" class="text-decoration-none text-secondary">SCPES FB Page </a></li>
-                        <li><a href="https://www.instagram.com/uescpes_official/" class="text-decoration-none text-secondary">SCPES IG </a></li>
+                        <li><a href="faq.html" class="text-decoration-none text-secondary hover:text-cyan-400 nav-trigger">FAQ's </a></li>
+                        <li><a href="https://www.facebook.com/uescpes" class="text-decoration-none text-secondary hover:text-cyan-400">SCPES FB Page </a></li>
+                        <li><a href="https://www.instagram.com/uescpes_official/" class="text-decoration-none text-secondary hover:text-cyan-400">SCPES IG </a></li>
                     </ul>
                 </div>
 
                 <div class="col-lg-2 col-md-6">
                     <h6 class="fw-bold text-white mb-3">Resources</h6>
                     <ul class="list-unstyled text-secondary small d-grid gap-2">
-                        <li><a href="#" class="text-decoration-none text-secondary">API Reference</a></li>
-                        <li><a href="#" class="text-decoration-none text-secondary">Hardware SDK</a></li>
+                        <li><a href="#" class="text-decoration-none text-secondary hover:text-cyan-400">API Reference</a></li>
+                        <li><a href="#" class="text-decoration-none text-secondary hover:text-cyan-400">Hardware SDK</a></li>
                     </ul>
                 </div>
 
@@ -933,11 +933,26 @@
 
     <!-- Custom Interactivity Scripts -->
     <script>
+        // Smooth transition loader triggers
+        document.querySelectorAll('a.nav-trigger, a[href$=".html"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const targetUrl = this.getAttribute('href');
+                if (targetUrl && targetUrl !== '#' && !targetUrl.startsWith('http')) {
+                    e.preventDefault();
+                    const loader = document.getElementById('cpe-loader');
+                    loader.classList.remove('hidden-loader');
+                    setTimeout(() => {
+                        window.location.href = targetUrl;
+                    }, 400);
+                }
+            });
+        });
+
         // View Switching Logic
         function showArcadeView() {
             document.getElementById('portal-view').classList.add('hidden');
             document.getElementById('arcade-view').classList.remove('hidden');
-            launchSnake(); // Default game on open
+            launchSnake();
         }
 
         function showPortalView() {
@@ -1066,8 +1081,8 @@
                 const now = audioCtx.currentTime;
                 if (type === 'correct') {
                     osc.type = 'sine';
-                    osc.frequency.setValueAtTime(587.33, now); // D5
-                    osc.frequency.exponentialRampToValueAtTime(880, now + 0.15); // A5
+                    osc.frequency.setValueAtTime(587.33, now);
+                    osc.frequency.exponentialRampToValueAtTime(880, now + 0.15);
                     gain.gain.setValueAtTime(0.15, now);
                     gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
                     osc.start(now);
@@ -1109,7 +1124,7 @@
             document.getElementById('arcade-screen-title').innerText = 'GAME ACTIVE: BINARY & HEX ENGINE';
             document.getElementById('arcade-controls').innerText = 'Type answer into input field & press Enter or Submit.';
 
-            document.onkeydown = null; // Unbind global canvas key handlers
+            document.onkeydown = null;
             startBinaryGame();
         }
 
@@ -1119,26 +1134,10 @@
             btn.classList.add('active');
 
             const labels = {
-                'bin2dec': { 
-                    label: 'CONVERT BINARY TO DECIMAL', 
-                    hint: 'Enter the decimal equivalent', 
-                    tip: 'Format tip: Decimal numbers (e.g., 14)' 
-                },
-                'dec2bin': { 
-                    label: 'CONVERT DECIMAL TO BINARY', 
-                    hint: 'Enter binary digits (0 and 1)', 
-                    tip: 'Format tip: Accepts 8-bit (00001110) or short (1110)' 
-                },
-                'hex2dec': { 
-                    label: 'CONVERT HEX TO DECIMAL', 
-                    hint: 'Enter the decimal equivalent', 
-                    tip: 'Format tip: Decimal numbers (e.g., 14)' 
-                },
-                'dec2hex': { 
-                    label: 'CONVERT DECIMAL TO HEX', 
-                    hint: 'Enter hexadecimal digits (0-9, A-F)', 
-                    tip: 'Format tip: Hexadecimal (e.g., E, 0xE, or 0E)' 
-                }
+                'bin2dec': { label: 'CONVERT BINARY TO DECIMAL', hint: 'Enter the decimal equivalent', tip: 'Format tip: Decimal numbers (e.g., 14)' },
+                'dec2bin': { label: 'CONVERT DECIMAL TO BINARY', hint: 'Enter binary digits (0 and 1)', tip: 'Format tip: Accepts 8-bit (00001110) or short (1110)' },
+                'hex2dec': { label: 'CONVERT HEX TO DECIMAL', hint: 'Enter the decimal equivalent', tip: 'Format tip: Decimal numbers (e.g., 14)' },
+                'dec2hex': { label: 'CONVERT DECIMAL TO HEX', hint: 'Enter hexadecimal digits (0-9, A-F)', tip: 'Format tip: Hexadecimal (e.g., E, 0xE, or 0E)' }
             };
 
             document.getElementById('mode-label').textContent = labels[mode].label;
@@ -1341,7 +1340,7 @@
                         startTypewriter();
                     }, 500);
                 }
-            }, 300);
+            }, 250);
 
             const textToType = "Welcome to the official CPE Web Portal. Architecting embedded microprocessors, IoT network infrastructure, and real-time computing systems.";
             const typewriterEl = document.getElementById('typewriter-text');
