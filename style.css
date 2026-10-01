@@ -24,6 +24,9 @@
   background-image: linear-gradient(to right, #90e0ef, #ffffff);
   -webkit-text-fill-color: transparent;
   -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+-webkit-background-clip: text;
+background-clip: text;
   font-weight: bold;
   position: relative;
   z-index: 2;
